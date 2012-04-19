@@ -1,0 +1,77 @@
+\documentclass[preprint]{acm_proc_article-sp}
+%\documentclass[preprint]{sig-alternate}
+\usepackage{url}
+\usepackage{graphicx,subfigure}
+\usepackage{xspace}
+
+\newcommand{\ie}{{\em i.e.,}~}
+\newcommand{\eg}{{\em e.g.,}~}
+
+\newenvironment{denseitemize}{
+\begin{itemize}[topsep=2pt, partopsep=0pt, leftmargin=1.5em]
+  \setlength{\itemsep}{4pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}
+
+\newcommand{\eat}[1]{}
+
+\begin{document}
+
+\title{Detecting Spam on Social Networking Sites:\\
+Related Work}
+
+\numberofauthors{3}
+\author{
+Antonio Lupher,
+Cliff Engle,
+Reynold Xin\\\\
+\texttt{\{alupher, cengle, rxin\}@cs.berkeley.edu}
+}
+
+\maketitle
+
+\section{Related Work}
+The rise of social media has made Social Networking Services (SNSs) more attractive targets for spam and fraud, leading to increasingly sophisticated attacks. This trend is reflected in recent research, as papers have focused on identifying and classifying the various types of social media spam. Many of these studies employ techniques previously used to combat conventional email and web spam. SNSs also provide opportunities to take advantage of user reputation and other social graph-dependent features to improve classification. Nevertheless, most research has been carried out on publicly-available data from SNSs, making it difficult up until now to measure the effect of private user data on algorithms for detecting site misuse.
+
+
+\subsection{Social Spam Features}
+
+Heymann et al. \cite{heymann} survey the field of spam on SNSs, identifying several common approaches. Identification-based approaches identify spam to train classifiers based on labels submitted by users or trusted moderators. Rank-based approaches demote visibility of questionable content, while interface-based approaches apply policies to prevent unwanted behavior. This work groups classification-based approaches with detection, although classifiers can be used in conjuction with user information to prevent spam before it happens.
+
+A number of researchers have focused on collecting, identifying features and classifying various genres of spam on social networks. Zinman and Donath \cite{zinman} extract bundles of profile-based and comment-based features from MySpace profiles, but the relatively poor performance of their classifier highlights the difficulties in manual classification social network spam. Several studies take the approach of baiting spammers with social ``honeypots", profiles created with the sole intent of attracting spam.\cite{stringhini, lee} They then use the data collected to train classifiers with features including friend request rate and ratios of URLs to text. Webb et al. \cite{webb} use the honeypot approach as well and provide examples of various types of spammers, the typical demographics of their profiles as well as the web pages that they tend to advertise. 
+
+Gao et al. \cite{gao} look at Facebook wall posts, analyzing temporal properties, URL characteristics, post ratios and other features of malicious accounts. They also pinpoint various spam ``campaigns" based on products advertised in a given time frame. They note that spam on Facebook often exhibits burstiness and is mainly sent from compromised accounts. Benevenuto et al. \cite{benevenuto} identify attributes of spam on video SNSs and use a Support Vector Machine (SVM) for classification.
+
+Not all undesirable content on SNSs is necessarily spam or a scam. SNSs and online communities witness inappropriate user behavior, where users post offensive and harassing content. Yin et al. \cite{yin} combine sentiment analysis and profanity word lists with contextual features to identify harassment on datasets from Slashdot and MySpace. Other work looks at SNSs as platforms to collect data about users in order to aid direct attacks on the user's computers or to compromise a large number of accounts. \cite{patsakis, huber}
+
+\subsection{Social Spam Detection Systems}
+
+SocialSpamGuard \cite{jin} is a social media spam detection system that analyzes text and image features of social media posts. The demo system uses GAD clustering \cite{jingad} for sampling spam and ham posts, then trains a classifier with text and image features. However, the system is built on top of Facebook features that are publicly accessible and thus cannot make use of sensitive user data (\eg IP addresses) to increase its effectiveness. 
+
+De Wang et al. \cite{wang} propose a cross-site spam detection framework to share spam data across all social networking sites, building classifiers to identify spam in profiles, messages and web pages. This multi-pronged approach lends itself to associative classification, in which, for example, a message would be classified as spam if it contained a link to a web page that had a high probability of being spam. Unfortunately, the differing characterestics of various social networks \eg the length of messages in Facebook vs. Twitter, can reduce the benefits of sharing spam corpora across diverse sites.
+
+Facebook \cite{stein} provides an overview of their ``immune system" defences against phishing, fraud and spam. The system is composed of classifier services, an ML-derived Feature Extraction Language (FXL), feature loops to aggregate and prepare features for classification and a policy engine to take action on suspected misuse. While the discussion remains high-level and includes few implemention particulars, it does include significant detail on the various types and characterists of undesirable activity on the site, including fake profiles, harassment, compromised accounts, malware and spam. 
+
+In contrast to research that focuses on dynamically detecting spam based on user activity, Irani et al. \cite{irani} show that static features associated with user signups on MySpace are enough to train an effective social spam classifier. They note that C4.5 decision tree algorithms provide better performance than naive Bayes in this case. As in other works, this only examines publicly available profile information collected by social honeypots. Private data collected on users including browser features, IP addresses and geographic location would conceivably improve classifier performance substantially.
+
+Bosma et al. \cite{bosma} explore user-generated spam reports as a tool for building an unsupervised spam detection framework for SNSs. Their approach counts the number of spam reports against a suspected spammer and adds weight to reports based on user reputation. Determining reputation and trustworthiness of users in social networks has been well studied \cite{bian, guha, zhang} and appears to be a promising addition to social spam classification. The framework uses a Bayesian classifier and links messages with similar content, but does not take into account other features. Nevertheless, this is one of the few studies to test its framework on non-public data, inlcuding private messages, spam reports and user profiles from a large Dutch social networking site.
+
+\subsection{Spam Email \& Web}
+
+Much work has been done on protecting traditional email systems from spam. Blanzieri \cite{blanzieri} offers a comprehensive overview of machine learning techniques that can be applied to email filtering. Hao et al. \cite{hao} describe a reputation engine based on lightweight features such as geographic distance between sender and receiver, geolocation anomalies and diurnal patterns. While the target was conventional spam, these and similar features are applicable to spam on SNSs as well.
+
+Whittaker et al. \cite{whittaker} describe a scalable phishing machine learning classifier and blacklisting system with high accuracy. Since a considerable amount of social media spam includes links to phishing sites, being able to detect them is critical. Along similar lines, Monarch \cite{thomas} is a system that provides scalable real-time detection of URLs that point to spam web pages as determined by URL features, page content and hosting properties of the target domain.
+
+Blog comment spam have also attracted considerable attention from researchers who have applied machine learning \cite{kolari, nag} and NLP \cite{mishne} techniques to the problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on social bookmarking sites.
+
+\subsection{Machine Learning and Data Mining}
+
+Many of the data mining algorithms used to detect spam and patterns of misuse on SNSs are designed with the assumption that the data and the classifier are independent. However, in the case of spam, fraud and other malicious content, users will often modify their behavior to evade detection, leading to degraded classifier performance and the need to re-train classifiers frequently. Several researchers tackle this adversarial problem. Dalvi et al. \cite{dalvi} offer a modified Naive Bayes classifier to detect and reclassify data taking into account the optimal modification strategy that an adversary could choose. Lowd and Meek \cite{lowd} provide a framework for reverse engineering a classifier to determine whether an adversary can efficiently learn enough about a classifier to effectively defeat it.
+
+
+\bibliographystyle{abbrv}
+\bibliography{paper}
+
+\balancecolumns
+\end{document}
