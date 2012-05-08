@@ -11,8 +11,6 @@
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
-
-
 \newenvironment{denseitemize}{
 \begin{itemize}[topsep=2pt, partopsep=0pt, leftmargin=1.5em]
   \setlength{\itemsep}{4pt}
@@ -194,25 +192,27 @@ This categorizations are based only on observation. Analyzing the relevant terms
 
 \section{Methodology}
 
-We decided to focus on spam in private messages for this paper, given that messages account for a majority of user spam reports. In addition to using the bag-of-words representation of the message content, we aimed to identify a subset of additional, relevant ``expert" features based on public and non-public message and account information that would augment the classifier's accuracy. We first extracted a number of fields that we expected might improve classification. 
+We chose to focus on spam in private messages for this paper, given that messages account for a majority of user spam reports. In addition to using the bag-of-words representation of the message content, we aimed to identify a subset of additional, relevant ``expert" features based on public and non-public message and account information that would augment the classifier's accuracy. We first extracted a number of fields that we expected might improve classification. 
 
 To choose a sample of relevant features, we computed statistics on the extracted features, both on the ham and spam corpora. These statistics were generated using SQL on a table created from the merged and cleaned data generated in the process described above.
 
-
-
-
 \subsection{Message Features}
 
-\textbf{Message Body \& Subject:} We extracted both the message 
-
-\textbf{Sender IP:} The IP address of the sender at the time that the user sent the message. 
+\textbf{Message Body \& Subject:} We extracted both the message body and subject from 
+each spam and ham message. The cleaning script generated two additional features based 
+on this. First, we counted the frequency of non-standard punctuation (we noticed that many 
+spam messages would, for example, put spaces before commas, periods and quotation marks, 
+and omit spaces after these characters). Second, we calculated the ratio of uppercase to 
+lowercase letters in the text, after observing relatively high amounts of uppercase text in spam messages.
+%% add numbers
 
 \textbf{Recipient Age/Sex/Country:} These fields were the age, sex and ISO 3166-1 alpha-2 code of the message 
 recipient, as listed on their profile. Unfortunately, due to data collection issues, this data was only available 
 for the most recent 11,000 spam messages. While the male-to-female ratio of the recipients was very close to that 
 of non-spam recipients (both were 47\% male to 53\% female), we found that the age of recipients was typically higher.
 
-\textbf{Recipient Replied:} A boolean, 1 or 0, depending on whether the recipient replied to the message.
+\textbf{Recipient Replied:} A boolean, 1 or 0, depending on whether the recipient replied to the message. We saw 
+that the mean reply rate for ham messages was 81.77\% (SD: 38.61), while it was only 0.81\% (SD: 8.97) for spam messages. 
 
 \subsection{Sender Account Features}
 
@@ -256,6 +256,52 @@ We chose message and user account features to analyze primarily by the amount of
 \caption{Feature statistics}
 \label{tab:feats}
 \end{table}
+
+\textbf{Sender Country:} The distribution of countries as stated by users on their profile and as 
+revealed by their IP address differed remarkably between the spam and ham user groups. 
+48\% of spam users claimed to be from the United States, with the next most popular 
+countries being the UK, Ghana, Senegal, Germany and Canada taking combined 25\%. 
+In contrast, only 15\% ham users claimed to be from the United States, with Russia, 
+Korea, UK, France and Germany combining for 24\%. This distribution of profile countries can 
+be seen in Figure \ref{fig:cprof}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/country-prof.pdf}
+    \caption{Country as stated on user profile.}
+    \label{fig:cprof}
+\end{figure}
+
+Users are free to choose any country on their profile. We record each IP address from which a 
+user logs in to the site. By examining the distribution of countries (using the MaxMind GeoIP 
+database) associated with the unique IP addresses (Figure \ref{fig:cip}), we see that the top 
+countries for spammers are significantly different, while the top ham countries are 
+virtually unchanged. Furthermore, only 30\% of the IP addresses of spam users who 
+claimed to be from the United States actually mapped back to a US-based ISP, with a combined 
+46\% indicating a Ghana, Nigeria and Senegal ISP (Figure \ref{fig:usaspam}). This contrasts 
+with the 73\% that US-based IP addresses comprised for ham users whose profiles stated that 
+they were in the United States (Figure \ref{fig:usaham}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/country-ip.pdf}
+    \caption{Country detected by IP address using MaxMind GeoIP database.}
+    \label{fig:cip}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/ips-usa-spam.pdf}
+    \caption{Distribution of IPs by country for spammers with profiles stating a USA location.}
+    \label{fig:usaspam}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/ips-usa-ham.pdf}
+    \caption{Distribution of IPs by country for ham users with profiles stating a USA location.}
+    \label{fig:usaham}
+\end{figure}
 
 \textbf{Sender IPs:} Spammers in general had a smaller number of unique IP addresses associated with them than ham users, as per figure \ref{fig:uniqip}. The mean for spammers was 11.82 with a standard deviation of 52.52 and a median of 2, whereas ham users saw a mean of 175.51, a standard deviation of 322.19 and median of 64. This is likely due to their comparatively low length of time on the site and the fact that many legitimate users are behind NATs that yield a high number of dynamic IP addresses. One possibility for future research is to investigate the ratio of unique IPs for users as a function of the time they have been registered. Likewise, examining unique /16 network blocks instead of unique IP addresses could mitigate the influence of NATs.
 
@@ -324,25 +370,6 @@ figure \ref{fig:drop}
 \end{figure}
 
 
-
-\textbf{Sender Country:} The distribution of countries as stated by users on their profile and as revealed by their IP address differed remarkably between the spam and ham user groups. 48\% of spam users claimed to be from the United States, with the next most popular countries being UK, Ghana, Senegal, Germany and Canada taking combined 25\%. In contrast, only 15\% ham users claimed to be from the United States, with Russia, Korea, UK, France and Germany combining for 24\%. 
-
-figure \ref{fig:usaspam}
-figure \ref{fig:usahamfig:lambda}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/ips-usa-spam.pdf}
-    \caption{Distribution of IPs by country for spammers with profiles stating a USA location.}
-    \label{fig:usaspam}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/ips-usa-ham.pdf}
-    \caption{Distribution of IPs by country for ham users with profiles stating a USA location.}
-    \label{fig:usaham}
-\end{figure}
 
 \textbf{Sender Photos:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
 
@@ -488,7 +515,6 @@ The LIBSVM scaling tool increases file size considerably for data sets with larg
 \subsection{Na\"ive Bayes}
 
 
-
 \subsection{Linear Regression}
 
 %\begin{tabular}{c|c}
@@ -583,19 +609,6 @@ figure \ref{fig:recipage}
 figure \ref{fig:sendage}
 figure \ref{fig:sendsex}
 figure \ref{fig:roc-25}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/country-prof.pdf}
-    \caption{Country as stated on user profile.}
-    \label{fig:cprof}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/country-ip.pdf}
-    \caption{Country detected by IP address using MaxMind GeoIP database.}
-    \label{fig:cip}
-\end{figure}
 
 \begin{figure}[h]
     \centering
