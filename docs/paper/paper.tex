@@ -532,28 +532,6 @@ We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C =
 
 The LIBSVM scaling tool increases file size considerably for data sets with large feature matrices. This large file size, coupled with the computational resources required for SVM training on large data sets, prevented us from completing our analysis of the 
 
-%\begin{tabular}{c|c|c}
-%    \multicolumn{3}{c}{Unscaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
-%    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
-%    \hline
-%    2k & 0.0 & 0.0 \\
-%    10k & 0.0 & 0.0 \\
-%    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
-%    50k  & 0.0 & 0.0 \\
-%    100k  & 0.0 & 0.0 \\
-%\end{tabular}
-%
-%
-%\begin{tabular}{c|c|c}
-%    \multicolumn{3}{c}{Scaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
-%    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
-%    \hline
-%    2k & 0.0 & 0.0 \\
-%    10k & 0.0 & 0.0 \\
-%    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
-%\end{tabular}
-%
-
 
 \section{Results}
 
@@ -572,42 +550,77 @@ We tried a number of values for $\lambda$: 1, 10, 50, 100, 500, 1000, 1500, 3000
 \end{figure}
 
 
+\begin{table}
+\begin{tabular}{l|l|l|l}
+\multicolumn{2}{c}{\textbf{Ham}} & 
+\multicolumn{2}{c}{\textbf{Spam}} \\
+\hline
+\textbf{Feature} & \textbf{Weight} & \textbf{Feature} & \textbf{Weight} \\
+\hline
+happy & -0.1314 & sex & 0.2295\\
+hahaha & -0.13 & cafe4tune & 0.1906\\
+turkey & -0.1271 & tony & 0.1715\\
+learn & -0.124 & oky & 0.1549\\
+fb & -0.1186 & photo & 0.1467\\
+goin & -0.1177 & hehe & 0.1379\\
+kk & -0.1164 & rochelle & 0.1346\\
+uganda & -0.1159 & register & 0.1327\\
+new & -0.1156 & irene & 0.1298\\
+msn & -0.1114 & okay & 0.1294\\
+ya & -0.11 & sexy & 0.1278\\
+thx & -0.1095 & ali & 0.1199\\
+question & -0.1095 & displaying & 0.1112\\
+xxx & -0.1081 & ghana & 0.111\\
+joyce & -0.1078 & correctly & 0.1102\\
+year & -0.1067 & ok & 0.1093\\
+hw & -0.1067 & m? & 0.1087\\
+snail & -0.1059 & sand & 0.1072\\
+direct & -0.1052 & check & 0.1058\\
+bonne & -0.1014 & sabina & 0.105\\
+\end{tabular}
+\caption{Linear Regression top features (bag-of-words) with weights}
+\label{tab:lrfeats}
+\end{table}
 
-%\begin{tabular}{c|c}
-%    \multicolumn{2}{c}{Tokens most likely to be positive} \\
-%    token & \(log(p_+ / p_-)\) \\
-%    \hline
-%    pos & 0.0 \\
-%    pos2 & 0.1 \\
-%\end{tabular}
-%
-%\begin{tabular}{c|c}
-%    \multicolumn{2}{c}{Tokens most likely to be negative} \\
-%    token & \(log(p_+ / p_-)\) \\
-%    \hline
-%    neg & 0.0 \\
-%    neg2 & 0.1 \\
-%\end{tabular}
-%
+\begin{table}
+\begin{tabular}{l|l|l|l}
+\multicolumn{2}{c}{\textbf{Ham}} & 
+\multicolumn{2}{c}{\textbf{Spam}} \\
+\hline
+\textbf{Feature} & \textbf{Weight} & \textbf{Feature} & \textbf{Weight} \\
+\hline
+
+requests & -0.1349 & F-country\_match & 0.3365\\
+giggle & -0.1257 & sex & 0.1954\\
+turkey & -0.1213 & cafe4tune & 0.1723\\
+hw & -0.1148 & register & 0.1324\\
+F-photo\_exists & -0.1087 & F-spam\_country & 0.1231\\
+xxx & -0.1047 & rochelle & 0.1054\\
+goin & -0.1008 & m? & 0.1019\\
+teacher & -0.1006 & tony & 0.1017\\
+happy & -0.0912 & hehe & 0.0991\\
+yie & -0.0904 & oky & 0.0968\\
+tea & -0.089 & sexy & 0.0967\\
+snail & -0.0852 & ewelina & 0.0874\\
+malaysia & -0.084 & card & 0.0866\\
+russian & -0.0832 & return & 0.0856\\
+fall & -0.0805 & video & 0.0842\\
+question & -0.0789 & pay & 0.0841\\
+ann? & -0.0785 & nas? & 0.0839\\
+learn & -0.0784 & model & 0.0826\\
+new & -0.0783 & displaying & 0.0808\\
+daichi & -0.0775 & k?  & 0.0806\\
+
+\end{tabular}
+\caption{Linear Regression top features (bag-of-words + expert features) with weights. Expert features
+are denoted by the 'F-' prefix.}
+\label{tab:lrfeats}
+\end{table}
+
+
+
 
 \subsection{SVMs}
-
-%\begin{tabular}{c|c}
-%    \multicolumn{2}{c}{Tokens most likely to be positive} \\
-%    token & \(log(p_+ / p_-)\) \\
-%    \hline
-%    pos & 0.0 \\
-%    pos2 & 0.1 \\
-%\end{tabular}
-%
-%\begin{tabular}{c|c}
-%    \multicolumn{2}{c}{Tokens most likely to be negative} \\
-%    token & \(log(p_+ / p_-)\) \\
-%    \hline
-%    neg & 0.0 \\
-%    neg2 & 0.1 \\
-%\end{tabular}
-%
 
 \section{Analysis}
 % Vern wants site owner perspective on how to apply classifiers
