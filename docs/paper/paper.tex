@@ -597,6 +597,9 @@ section containing recipient age feature data.
 %The distributions \(\Pr(c)\) and \(\Pr(w|c)\) are parameters of the model.
 %
 %
+
+
+
 \subsection{Linear Regression}
 
 Linear regression is a method to model the relationship between an output variable, 
@@ -663,10 +666,19 @@ We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C =
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
+\section{Results \& Analysis}
 
 \subsection{Na\"ive Bayes}
 
+
+One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
+and the steps involved were all trivially parallelizable, which makes it convenient for large data sets.
+
+The decline in accuracy after adding expert features is most likely explained by the "naive" assumption in this 
+algorithm that the features are independent. Several of the features that we used, \eg{account lifetime, 
+and whether a user has friends or photos}, are in fact likely to be co-dependent, leading to an overweight of 
+these features during classification. The wealth of expert features available to a SNS, many of which are 
+not independent, makes this the least compelling classifier choice that we examined.
 
 \subsection{Linear Regression}
 
