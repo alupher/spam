@@ -550,8 +550,9 @@ We tried a number of values for $\lambda$: 1, 10, 50, 100, 500, 1000, 1500, 3000
 \end{figure}
 
 
+% LR B-O-W
 \begin{table}
-\begin{tabular}{l|l|l|l}
+\begin{tabular}{l|l||l|l}
 \multicolumn{2}{c}{\textbf{Ham}} & 
 \multicolumn{2}{c}{\textbf{Spam}} \\
 \hline
@@ -582,8 +583,10 @@ bonne & -0.1014 & sabina & 0.105\\
 \label{tab:lrfeats}
 \end{table}
 
+
+% LR + expert
 \begin{table}
-\begin{tabular}{l|l|l|l}
+\begin{tabular}{l|l||l|l}
 \multicolumn{2}{c}{\textbf{Ham}} & 
 \multicolumn{2}{c}{\textbf{Spam}} \\
 \hline
@@ -621,6 +624,45 @@ are denoted by the 'F-' prefix.}
 
 
 \subsection{SVMs}
+
+\begin{table}
+\begin{tabular}{l|l||l|l}
+\multicolumn{2}{c}{\textbf{Bag-of-Words}} & 
+\multicolumn{2}{c}{\textbf{Expert Features}} \\
+\hline
+\textbf{Feature} & \textbf{Ham Weight} & \textbf{Feature} & \textbf{Ham Weight} \\
+\hline
+
+year & 0.2253 & F-account\_lifetime & -0.98\\
+new & 0.225 & F-friends & -0.3671\\
+am & -0.1722 & F-recip\_age & -0.2129\\
+happy & 0.16 & F-age & -0.183\\
+d & 0.1513 & i & -0.05231\\
+ok & -0.1497 & you & -0.0483\\
+yahoo & -0.136 & to & -0.04026\\
+it & 0.12 & and & -0.03636\\
+me & -0.118 & F-month\_of\_birth & -0.03452\\
+too & 0.1173 & F-country\_match & -0.0269\\
+i'm & 0.1116 & me & -0.0224\\
+haha & 0.0998 & am & -0.022\\
+can & -0.0971 & my & -0.0209\\
+okay & -0.0947 & ? & 0.0199\\
+dear & -0.0882 & ? & 0.0191\\
+p & 0.0862 & a & -0.01573\\
+here & -0.0844 & your & -0.01554\\
+2012 & 0.084 & F-photo\_exists & -0.0146\\
+wish & 0.0836 & the & -0.01412\\
+doing & -0.0779 & f-sex & -0.01258\\
+
+\end{tabular}
+\caption{SVM term weights (ScalaNLP Pegasos implementation). The spam term weights were the same, but opposite signs.
+Question marks indicate strings in a different character encoding.}
+\label{tab:svmfeats}
+\end{table}
+
+
+
+
 
 \section{Analysis}
 % Vern wants site owner perspective on how to apply classifiers
