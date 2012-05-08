@@ -109,46 +109,134 @@ labeled as spam by users. Other data includes 40 million or so "wall"
 comments, 5 million photos, and 8 million photo comments. 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work} 
 
-The rapid growth of social media has made Social Networking Services (SNSs) increasingly attractive targets for spam and fraud, leading to a proliferation of sophisticated attacks. This trend is reflected in recent research, as papers have focused on identifying and classifying the various types of social media spam. Many of these studies employ techniques previously used to combat conventional email and web spam. SNSs also provide opportunities to take advantage of user reputation and other social graph-dependent features to improve classification. Nevertheless, most research has been carried out on publicly-available data from SNSs, making it difficult up until now to measure the effect of private user data on algorithms for detecting site misuse.
+The rapid growth of social media has made Social Networking Services (SNSs) 
+increasingly attractive targets for spam and fraud, leading to a proliferation 
+of sophisticated attacks. This trend is reflected in recent research, as papers 
+have focused on identifying and classifying the various types of social media spam. 
+Many of these studies employ techniques previously used to combat conventional 
+email and web spam. SNSs also provide opportunities to take advantage of user 
+reputation and other social graph-dependent features to improve classification. 
+Nevertheless, most research has been carried out on publicly-available data 
+from SNSs, making it difficult up until now to measure the effect of private user 
+data on algorithms for detecting site misuse.
 
 
 \subsection{Social Spam Features}
 
-Heymann et al. \cite{heymann} survey the field of spam on SNSs, identifying several common approaches. Identification-based approaches identify spam to train classifiers based on labels submitted by users or trusted moderators. Rank-based approaches demote visibility of questionable content, while interface-based approaches apply policies to prevent unwanted behavior. This work groups classification-based approaches with detection, although classifiers can be used in conjunction with user information to prevent spam before it happens.
+Heymann et al. \cite{heymann} survey the field of spam on SNSs, identifying 
+several common approaches. Identification-based approaches identify spam to 
+train classifiers based on labels submitted by users or trusted moderators. 
+Rank-based approaches demote visibility of questionable content, while interface-based 
+approaches apply policies to prevent unwanted behavior. This work groups 
+classification-based approaches with detection, although classifiers can be 
+used in conjunction with user information to prevent spam before it happens.
 
-A number of researchers have focused on collecting, identifying features and classifying various genres of spam on social networks. Zinman and Donath \cite{zinman} extract bundles of profile-based and comment-based features from MySpace profiles, but the relatively poor performance of their classifier highlights the difficulties in manual classification social network spam. Several studies take the approach of baiting spammers with social ``honeypots", profiles created with the sole intent of attracting spam.\cite{stringhini, lee} They then use the data collected to train classifiers with features including friend request rate and ratios of URLs to text. Webb et al. \cite{webb} use the honeypot approach as well and provide examples of various types of spammers, the typical demographics of their profiles as well as the web pages that they tend to advertise. 
+A number of researchers have focused on collecting, identifying features 
+and classifying various genres of spam on social networks. Zinman and 
+Donath \cite{zinman} extract bundles of profile-based and comment-based 
+features from MySpace profiles, but the relatively poor performance of their classifier highlights 
+the difficulties in manual classification social network spam. Several 
+studies take the approach of baiting spammers with social ``honeypots", profiles 
+created with the sole intent of attracting spam.\cite{stringhini, lee} They 
+then use the data collected to train classifiers with features including 
+friend request rate and ratios of URLs to text. Webb et al. \cite{webb} use 
+the honeypot approach as well and provide examples of various types of spammers, 
+the typical demographics of their profiles as well as the web pages that they tend to advertise. 
 
-Gao et al. \cite{gao} look at Facebook wall posts, analyzing temporal properties, URL characteristics, post ratios and other features of malicious accounts. They also pinpoint various spam ``campaigns" based on products advertised in a given time frame. They note that spam on Facebook often exhibits burstiness and is mainly sent from compromised accounts. Benevenuto et al. \cite{benevenuto} identify attributes of spam on video SNSs and use a Support Vector Machine (SVM) for classification.
+Gao et al. \cite{gao} look at Facebook wall posts, analyzing temporal properties, 
+URL characteristics, post ratios and other features of malicious accounts. They 
+also pinpoint various spam ``campaigns" based on products advertised in a given 
+time frame. They note that spam on Facebook often exhibits burstiness and is mainly 
+sent from compromised accounts. Benevenuto et al. \cite{benevenuto} identify 
+attributes of spam on video SNSs and use a Support Vector Machine (SVM) for classification.
 
-Not all undesirable content on SNSs is necessarily spam or a scam. SNSs and online communities witness inappropriate user behavior, where users post offensive and harassing content. Yin et al. \cite{yin} combine sentiment analysis and profanity word lists with contextual features to identify harassment on datasets from Slashdot and MySpace. Other work looks at SNSs as platforms to collect data about users in order to aid direct attacks on the user's computers or to compromise a large number of accounts. \cite{patsakis, huber}
+Not all undesirable content on SNSs is necessarily spam or a scam. SNSs and 
+online communities witness inappropriate user behavior, where users post offensive 
+and harassing content. Yin et al. \cite{yin} combine sentiment analysis and profanity 
+word lists with contextual features to identify harassment on datasets from Slashdot 
+and MySpace. Other work looks at SNSs as platforms to collect data about users in 
+order to aid direct attacks on the user's computers or to compromise a large number of accounts. \cite{patsakis, huber}
 
 \subsection{Social Spam Detection Systems}
 
-SocialSpamGuard \cite{jin} is a social media spam detection system that analyzes text and image features of social media posts. The demo system uses GAD clustering \cite{jingad} for sampling spam and ham posts, then trains a classifier with text and image features. However, the system is built on top of Facebook features that are publicly accessible and thus cannot make use of sensitive user data (\eg IP addresses) to increase its effectiveness. 
+SocialSpamGuard \cite{jin} is a social media spam detection system that analyzes 
+text and image features of social media posts. The demo system uses GAD 
+clustering \cite{jingad} for sampling spam and ham posts, then trains a 
+classifier with text and image features. However, the system is built on top 
+of Facebook features that are publicly accessible and thus cannot make use of 
+sensitive user data (\eg IP addresses) to increase its effectiveness. 
 
-De Wang et al. \cite{wang} propose a cross-site spam detection framework to share spam data across all social networking sites, building classifiers to identify spam in profiles, messages and web pages. This multi-pronged approach lends itself to associative classification, in which, for example, a message would be classified as spam if it contained a link to a web page that had a high probability of being spam. Unfortunately, the differing characteristics of various social networks \eg the length of messages in Facebook vs. Twitter, can reduce the benefits of sharing spam corpora across diverse sites.
+De Wang et al. \cite{wang} propose a cross-site spam detection framework to share 
+spam data across all social networking sites, building classifiers to identify spam 
+in profiles, messages and web pages. This multi-pronged approach lends itself to 
+associative classification, in which, for example, a message would be classified as 
+spam if it contained a link to a web page that had a high probability of being spam. 
+Unfortunately, the differing characteristics of various social networks \eg the length 
+of messages in Facebook vs. Twitter, can reduce the benefits of sharing spam corpora across diverse sites.
 
-Facebook \cite{stein} provides an overview of their ``immune system" defences against phishing, fraud and spam. The system is composed of classifier services, an ML-derived Feature Extraction Language (FXL), feature loops to aggregate and prepare features for classification and a policy engine to take action on suspected misuse. While the discussion remains high-level and includes few implemention particulars, it does include significant detail on the various types and characteristics of undesirable activity on the site, including fake profiles, harassment, compromised accounts, malware and spam. 
+Facebook \cite{stein} provides an overview of their ``immune system" defences 
+against phishing, fraud and spam. The system is composed of classifier services, an 
+ML-derived Feature Extraction Language (FXL), feature loops to aggregate and prepare 
+features for classification and a policy engine to take action on suspected misuse. While 
+the discussion remains high-level and includes few implemention particulars, it does 
+include significant detail on the various types and characteristics of undesirable 
+activity on the site, including fake profiles, harassment, compromised accounts, malware and spam. 
 
-In contrast to research that focuses on dynamically detecting spam based on user activity, Irani et al. \cite{irani} show that static features associated with user signups on MySpace are enough to train an effective social spam classifier. They note that C4.5 decision tree algorithms provide better performance than Na\"ive Bayes in this case. As in other works, this only examines publicly available profile information collected by social honeypots. Private data collected on users including browser features, IP addresses and geographic location would conceivably improve classifier performance substantially.
+In contrast to research that focuses on dynamically detecting spam based on user 
+activity, Irani et al. \cite{irani} show that static features associated with user signups 
+on MySpace are enough to train an effective social spam classifier. They note that
+C4.5 decision tree algorithms provide better performance than Na\"ive Bayes in this case. 
+As in other works, this only examines publicly available profile information collected 
+by social honeypots. Private data collected on users including browser features, IP addresses 
+and geographic location would conceivably improve classifier performance substantially.
 
-Bosma et al. \cite{bosma} explore user-generated spam reports as a tool for building an unsupervised spam detection framework for SNSs. Their approach counts the number of spam reports against a suspected spammer and adds weight to reports based on user reputation. Determining reputation and trustworthiness of users in social networks has been well studied \cite{bian, guha, zhang} and appears to be a promising addition to social spam classification. The framework uses a Bayesian classifier and links messages with similar content, but does not take into account other features. Nevertheless, this is one of the few studies to test its framework on non-public data, including private messages, spam reports and user profiles from a large Dutch social networking site.
+Bosma et al. \cite{bosma} explore user-generated spam reports as a tool for building an unsupervised 
+spam detection framework for SNSs. Their approach counts the number of spam reports against a 
+suspected spammer and adds weight to reports based on user reputation. Determining reputation 
+and trustworthiness of users in social networks has been well studied \cite{bian, guha, zhang} 
+and appears to be a promising addition to social spam classification. The framework uses a 
+Bayesian classifier and links messages with similar content, but does not take into account 
+other features. Nevertheless, this is one of the few studies to test its framework on 
+non-public data, including private messages, spam reports and user profiles from a 
+large Dutch social networking site.
 
 \subsection{Spam Email \& Web}
 
-Much work has been done on protecting traditional email systems from spam. Blanzieri \cite{blanzieri} offers a comprehensive overview of machine learning techniques that can be applied to email filtering. Hao et al. \cite{hao} describe a reputation engine based on lightweight features such as geographic distance between sender and receiver, geolocation anomalies and diurnal patterns. While the target was conventional spam, these and similar features are applicable to spam on SNSs as well.
+Much work has been done on protecting traditional email systems from spam. 
+Blanzieri \cite{blanzieri} offers a comprehensive overview of machine learning techniques 
+that can be applied to email filtering. Hao et al. \cite{hao} describe a reputation 
+engine based on lightweight features such as geographic distance between sender and 
+receiver, geolocation anomalies and diurnal patterns. While the target was conventional 
+spam, these and similar features are applicable to spam on SNSs as well.
 
-Whittaker et al. \cite{whittaker} describe a scalable phishing machine learning classifier and blacklisting system with high accuracy. Since a considerable amount of social media spam includes links to phishing sites, being able to detect them is critical. Along similar lines, Monarch \cite{thomas} is a system that provides scalable real-time detection of URLs that point to spam web pages as determined by URL features, page content and hosting properties of the target domain.
+Whittaker et al. \cite{whittaker} describe a scalable phishing machine learning 
+classifier and blacklisting system with high accuracy. Since a considerable 
+amount of social media spam includes links to phishing sites, being able to 
+detect them is critical. Along similar lines, Monarch \cite{thomas} is a 
+system that provides scalable real-time detection of URLs that point to spam web pages as 
+determined by URL features, page content and hosting properties of the target domain.
 
-Blog comment spam have also attracted considerable attention from researchers who have applied machine learning \cite{kolari, nag} and NLP \cite{mishne} techniques to the problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on social bookmarking sites.
+Blog comment spam have also attracted considerable attention from researchers who 
+have applied machine learning \cite{kolari, nag} and NLP \cite{mishne} techniques to the 
+problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on social bookmarking sites.
 
 \subsection{Machine Learning and Data Mining}
 
-Many of the data mining algorithms used to detect spam and patterns of misuse on SNSs are designed with the assumption that the data and the classifier are independent. However, in the case of spam, fraud and other malicious content, users will often modify their behavior to evade detection, leading to degraded classifier performance and the need to re-train classifiers frequently. Several researchers tackle this adversarial problem. Dalvi et al. \cite{dalvi} offer a modified Na\"ive Bayes classifier to detect and reclassify data taking into account the optimal modification strategy that an adversary could choose. Lowd and Meek \cite{lowd} provide a framework for reverse engineering a classifier to determine whether an adversary can efficiently learn enough about a classifier to effectively defeat it.
+Many of the data mining algorithms used to detect spam and patterns of misuse 
+on SNSs are designed with the assumption that the data and the classifier are 
+independent. However, in the case of spam, fraud and other malicious content, 
+users will often modify their behavior to evade detection, leading to degraded 
+classifier performance and the need to re-train classifiers frequently. Several 
+researchers tackle this adversarial problem. Dalvi et al. \cite{dalvi} offer a 
+modified Na\"ive Bayes classifier to detect and reclassify data taking into account 
+the optimal modification strategy that an adversary could choose. Lowd and Meek \cite{lowd} 
+provide a framework for reverse engineering a classifier to determine whether 
+an adversary can efficiently learn enough about a classifier to effectively defeat it.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data set}
 
 For this project, we had unlimited access to data from InterPals, a SNS for users who wish to communicate with others from other countries, whether for language practice, cultural exchange or friendship. Users sign up by completing a registration form with information about themselves, including age, sex and location. After registering, users can expand their profile page to include descriptions, interests, languages they speak, etc. and upload photographs. After clicking on a link sent to their email address, a user can begin to interact with others on the site via private message, public ``wall" posts, comments on photos and on a bulletin board system.
@@ -190,6 +278,7 @@ In the course of collecting the data, we observed a number of different types of
 This categorizations are based only on observation. Analyzing the relevant terms in log comments entered by moderators when deleting spammer accounts provides the following breakdown:
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methodology}
 
 We chose to focus on spam in private messages for this paper, given that messages account for 
@@ -255,8 +344,11 @@ We chose message and user account features to analyze primarily by the amount of
     \multirow{2}{*}{Profile Desc. Len.} & Spam & 267.30 & 87 & 483.19\\
     & Ham & 439.33 & 267 & 613.26\\
     \hline
-    \multirow{2}{*}{\% Fields Completed} & Spam & 22.15 & 14.00 & 30.75\\
-    & Ham & 79.29 & 86.00 & 32.85\\
+    \multirow{2}{*}{Fields Complete} & Spam & 22.15\% & 14.00\% & 30.75\\
+    & Ham & 79.29\% & 86.00\% & 32.85\\
+    \hline
+    \multirow{2}{*}{Account Lifetime} & Spam & 900.36 h & 1.12 h & 4163.25\\
+    & Ham & 8963.19 h & 5297.09 h & 11750.39 \\
     \hline
 \end{tabular}
 \caption{Feature statistics}
@@ -318,6 +410,16 @@ they were in the United States (Figure \ref{fig:usaham}).
     \label{fig:uniqip}
 \end{figure}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/lifetime.pdf}
+    \caption{Sender account lifetime at the time that the message was sent.}
+    \label{fig:lifetime}
+\end{figure}
+
+
+
+
 \textbf{Sender Email:} Users must provide email addresses upon signup. The site does not allow users to contact other 
 members before verifying that the email address provided is valid, via an account activation link sent to the signup 
 address. Subsequent changes to a user's email address on file require a similar confirmation process. Thus, we can be certain 
@@ -333,10 +435,10 @@ that the email accounts that we extracted were in use by the senders, at least a
 In the data processing step, we extracted the domain name from each email address. We found that ham user email domains 
 were distributed across top email providers in similar proportions (Hotmail, Yahoo and Gmail accounted for 22\%, 17\% and 17\% 
 respectively). For spam user accounts, Hotmail, Yahoo and Gmail accounted for 7\%, 72\% and 6\% respectively. This striking 
-predominance of Yahoo email accounts among spammers can be seen in figure \ref{fig:email}. While we have no explanation for 
-this, figure \cite{fig:ysmap} shows that Ghana and Nigeria alone account for 38\% of the IP addresses associated with these 
-Yahoo accounts. This popularity of Yahoo among West African users has been noted before\cite{burrell}, and appears to be 
-due to the early penetration of Yahoo services in the region.
+predominance of Yahoo email accounts among spammers can be seen in figure \ref{fig:email}. While we have no certain 
+explanation for this, Figure \ref{fig:yspam} shows that Ghana and Nigeria alone account for 38\% of the IP 
+addresses associated with these Yahoo accounts. This popularity of Yahoo among West African users has 
+been noted before\cite{burrell}, and appears to be due to the early penetration of Yahoo services in the region.
 
 \begin{figure}[h]
     \centering
@@ -405,6 +507,22 @@ figure \ref{fig:drop}
 
 \textbf{Extra Profile Features:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/photos.pdf}
+    \caption{Number of photos associated with sender account.}
+    \label{fig:photos}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/friends.pdf}
+    \caption{Number of friends associated with sender account.}
+    \label{fig:friends}
+\end{figure}
+
+
+
 \textbf{Sender Age:}
 
 \textbf{Sender Name:}
@@ -421,11 +539,12 @@ figure \ref{fig:drop}
 \textbf{IP Mismatch.} This 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Classification}
 
 Our goal in classification was not only to build an effective classifier for spam detection, but also to see how the presence of ``expert features", or features based on account and message metadata, could affect classifier accuracy. To this end, with of each of the classifiers we chose to implement, we evaluated performance on a bag-of-words representation of message data as well as a combination of bag-of-words with expert features.
 
-In order to train our classifiers, we had to create a feature matrix from the message and account data. We did this using 
+In order to train our classifiers, we created a feature matrix from the message and account data. We did this using 
 Perl, Spark, and Lucene analyzers. The first step was to generate a dictionary sorted by document frequencies in descending 
 order, mapping each feature (word or expert feature value) to an integer key. The second step was to create a sparse 
 matrix representation of each document (in this case, spam or ham message) and the associated features. Spark provides a 
@@ -447,9 +566,12 @@ message text, we used the following features:
 \item IP-detected country is Ghana, Nigeria, Senegal, Malaysia, Turkey, Gambia, Ivory Coast, Togo (``high-risk" countries) (boolean)
 \end{itemize}
 
+We initially trained and evaluated three classifiers on a small subset of the data: Na\"ive Bayes, Linear Regression and SVM. 
+We chose an 11k spam and 11k ham sample for training, using this particular sample size due to the size of the spam corpus 
+section containing recipient age feature data.  
+
 %classification:
 %- implemented 3 models: naive bayes, linear regression, and SVM.
-%- used scalanlp for SVM: Pegasos: Primal Estimated sub-GrAdient SOlver for SVM Extended with Wang, Crammer, Vucetic's work for Multiclass. The optimizer runs a stochastic subgradient descent on the primal objective using batches provided.
 %- used scalanlp for naive bayes
 %- used matlab for linear regression with ridge regularization.
 %- also attempted logistics regression with scalanlp, but training result was buggy (always output 0 probably. perhaps a bug in scalanlp)
@@ -509,7 +631,6 @@ representations created above,
 
 
 
-
 \subsection{Logistic Regression}
 
 We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, but encountered a bug that prevented the model from being generated correctly. With the expectation that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM instead of pursuing logistic regression. 
@@ -519,20 +640,29 @@ We attempted to train the multiple logistic regression classifier implemented by
 
 %intro to svms
 
-Support Vector Machines are a classification method  \cite{boser}, \cite{cortesv95} 
+Support Vector Machines are a classification method \cite{boser}, \cite{cortesv95} 
 
-% scalanlp svm 
+We initially used ScalaNLP's built-in SVM solver, which implements the Pegasos algorithm \cite{pegasos} as extended 
+by Wang, Crammer and Vucetic\cite{wang2}. The optimizer runs stochastic subgradient descent on the primal objective 
+using batches provided. However, the ScalaNLP SVM interface does not allow changing kernel functions or parameters, 
+which seems to have led to the classifier's sub-par performance.
 
-% libsvm
+We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
+Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
+($\gamma$, $\rho$, $d$), as well as a penalty parameter ($C$). We used Perl to convert the sparse feature 
+matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package'
+s tools to perform simple scaling on the data. 
 
-LIBSVM is library for SVM training and classification in C++ and Java, with wrappers for Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters ($\gamma$, $\rho$, $d$), as well as a penalty parameter ($C$). We used Perl to convert the sparse feature matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package's tools to perform simple scaling on the data. 
-
-Given the complexity of choosing kernels and parameters, the package includes a Python script that performs cross-validation to suggest appropriate $\gamma$ and $C$ values for the recommended radial basis function (RBF) kernel. The RBF kernel is a real-valued function such that: $$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
+Given the complexity and time-intensive nature of choosing and testing parameters, the 
+package includes a Python script that performs cross-validation to suggest appropriate 
+$\gamma$ and $C$ values for the recommended radial basis function (RBF) kernel. The RBF kernel is 
+a real-valued function such that: 
+$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
 We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C = 8$ and $\gamma = 0.0078125$.
 
-The LIBSVM scaling tool increases file size considerably for data sets with large feature matrices. This large file size, coupled with the computational resources required for SVM training on large data sets, prevented us from completing our analysis of the 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
 \subsection{Na\"ive Bayes}
@@ -620,9 +750,6 @@ are denoted by the 'F-' prefix.}
 \label{tab:lrfeats}
 \end{table}
 
-
-
-
 \subsection{SVMs}
 
 \begin{table}
@@ -664,12 +791,14 @@ Question marks indicate strings in a different character encoding.}
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis}
 % Vern wants site owner perspective on how to apply classifiers
 From a site's perspective, ...
 
 - plan to implement SVM, despite speed tradeoff 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
 
 \subsection{Spam Grouping}
@@ -700,6 +829,7 @@ Server access logs, search logs and user viewing histories from InterPals, all o
 - test SVM and other classifiers on newer data
 - 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
 In this paper, we presented a brief overview of the breakdown of spam and scams on the InterPals web site. 
@@ -721,13 +851,6 @@ figure \ref{fig:sendage}
 figure \ref{fig:sendsex}
 figure \ref{fig:roc-25}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/friends.pdf}
-    \caption{Number of friends associated with sender account.}
-    \label{fig:friends}
-\end{figure}
-
 
 \begin{figure}[h]
     \centering
@@ -746,26 +869,14 @@ figure \ref{fig:roc-25}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figures/photos.pdf}
-    \caption{Number of photos associated with sender account.}
-    \label{fig:photos}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
     \includegraphics[width=\linewidth]{figures/sex.pdf}
     \caption{Sender sex as stated on profile.}
     \label{fig:sendsex}
 \end{figure}
 
 
-
-
 \bibliographystyle{abbrv}
 \bibliography{paper}
-
-
 
 \balancecolumns
 \end{document}
