@@ -33,9 +33,9 @@ Reynold Xin\\\\
 \maketitle
 
 \section{Introduction}
+% Modified from project proposal
 
 \subsection{Problem}
-
 Social networks of any significant size see constant spam, scams
 and phishing attacks. The nature of these attacks can be quite diverse
 and difficult detect. Marketers can spam members with unwanted
@@ -52,7 +52,7 @@ types of common frauds and spam more easy to distinguish on US-based
 
 \subsection{Approach}
 
-This project examines in detail the types of malicious and benign
+This paper examines in detail the types of malicious and benign
 content that are encountered on social networks by analyzing
 experimental data available from InterPals, an international social network
 for cultural exchange and language practice. For example, the site
@@ -61,50 +61,35 @@ attracts a wide variety of financial scams, ranging from Nigerian
 links to third-party websites, directing users to various porn/webcam
 sites, phishing sites or various untrustworthy online marketplaces.
 
-We will then examine various methods of detecting and preventing abuse
+We examine various methods of detecting and preventing abuse
 on the site, including those measures that have already been taken
 (e.g. various heuristics including IP/location anomaly detection,
-frequency capping, duplicate account detection, etc.). However, the
-main focus will be on mining experimental data from the site and using
-features derived from this data to build and evaluate classifiers to
-detect unwanted behavior programmatically. The large volume of data
-available to us will provide a unique perspective both on the types of
+frequency capping, duplicate account detection, etc.). We then analyze 
+message and user account data points to try to differentiate legitimate users
+from malicious ones. By mining this data, we extract features 
+to build and evaluate classifiers that can detect unwanted behavior 
+programmatically. The large volume of data available to us, although we do 
+not use all of it, provides a unique perspective both on the types of
 malicious content that exist on such sites as well as on the
-effectiveness of classifier/learning-based approaches to identifying
+effectiveness of classifier-based approaches to identifying
 these activities.
+
+We investigated several machine learning techniques to automatically 
+detect spam and scams in the private message data, and chose to use 
+train and evaluate Naive Bayes, Linear Regression, and 
+Support Vector Machine (SVM) classifiers. Our implementations used 
+a variety of tools, including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
+an in-memory distributed computing framework designed for machine 
+learning and iterative computation.
+
 
 \subsection{Data sets}
 
-We plan to make heavy use of our unrestricted access to the data of
-InterPals, which has over 1.3 million active members. This data
-includes a corpus of over a 100 million private messages and another 2 
-million messages that have been labeled as spam by users. Other data
-includes 40 million or so "wall" comments, 5 million photos, and 8
-million photo comments. 
-
-\subsection{Techniques}
-
-Using this data, we plan to first identify the most prevalent types of 
-malicious activities on the site. We will investigate various machine learning 
-techniques to automatically detect these activities, including sampling, clustering and 
-classifiers. Sampling and clustering, in addition to the user-labeled and moderator-verified 
-spam corpus, will help us identify training data. 
-
-Classifiers that we plan to explore 
-include: 
-
-\begin{itemize}
-\item Naive Bayes
-\item Regression
-\item SVMs 
-\end{itemize}
-
-We then test the classifiers on new site data to evaluate their performance.
-
-One important part of this project will be to identify features of undesirable activity that are useful in classification. We plan to examine:
-
-\subsection{Frameworks}
-We implement the detection algorithms using Matlab, ScalaNLP, LibSVM, and Spark, an in-memory distributed computing framework designed for machine learning and iterative computation.
+We enjoyed unrestricted access to the data of InterPals.net, a SNS with 
+over 1.3 million active members. This data includes a corpus of over a 
+100 million private messages and another 2 million messages that have been 
+labeled as spam by users. Other data includes 40 million or so "wall" 
+comments, 5 million photos, and 8 million photo comments. 
 
 
 \section{Background} 
@@ -153,7 +138,13 @@ For this project, we had unlimited access to data from InterPals, a SNS for user
 
 Currently, the site combats spam and other Terms of Service violations through volunteer moderators. Users can report content, including private messages, profiles and photographs to moderators, using a form that includes a drop-down menu of pre-selected reasons with the option to add a more detailed message in a text field. Likewise, the message interface allows a user to report a private message spam with a single click. Moderators have access to a queue of these reports. In addition to the material being reported, moderators are able to make decisions based on the data from the reported user's account, including outgoing private messages, IP addresses, as well as a list of other users who have logged in from the same computer (determined via IP address as well as by browser fingerprints). Moderators can then decide to delete the user, send a warning, or clear reports on a user. All moderator actions require them to annotate their decision with a brief log message. 
 
-The data in our 
+\subsection{Spam Set}
+
+
+
+\subsection{Ham Set}
+
+To simplify the labeling of ham messages, we made the assumption that messages remaining in the inboxes of active users after a period of several months would most likely not be spam. Consequently, we extracted a working set of 2 million ham messages 
 
 \subsection{Categories of Spam}
 
@@ -172,13 +163,6 @@ Our ongoing observation of spam on the InterPals website provided direct intuiti
 
 This categorizations are based only on observation. Analyzing the relevant terms in log comments entered by moderators when deleting spammer accounts provides the following breakdown:
 
-\subsection{Spam Set}
-
-
-
-\subsection{Ham Set}
-
-To simplify the labeling of ham messages, we made the assumption that messages remaining in the inboxes of active users after a period of several months would most likely not be spam. Consequently, we extracted a working set of 2 million ham messages 
 
 
 \section{Methodology}
@@ -225,6 +209,7 @@ Due to data collection issues, recipient data (age, sex, country) was only avail
 \textbf{Sender Sex:}
 
 \subsection{Mixed Features}
+
 \textbf{Account Lifetime.}
 
 \textbf{IP Mismatch.} This 
@@ -237,31 +222,31 @@ Due to data collection issues, recipient data (age, sex, country) was only avail
 \subsection{Naive Bayes}
 
 % Modified from Reynold's HW1  write-up
-We use a na\"ive Bayes model, in which the documents are generated according to the following process.  
-First, a class \(c\) is chosen from a probability distribution \(\Pr(c)\).
-Then, a document from class \(c\) is generated.
-We tried a multinomial model and a Bernoulli model to model this process.
-\begin{itemize}
-\item \emph{Multinomial model.}  A document length \(m_d\) is chosen and \(m_d\) words \(w_{d,1}, \dotsc, w_{d,m_d}\) are chosen independently from a distribution \(\Pr(w|c)\).
-\item \emph{Bernoulli model.}  For each word \(w\) in the vocabulary, \(w\) is added to the document with probability \(\Pr(w|c)\).
-\end{itemize}
-The distributions \(\Pr(c)\) and \(\Pr(w|c)\) are parameters of the model.
-
-
+%We use a na\"ive Bayes model, in which the documents are generated according to the following process.  
+%First, a class \(c\) is chosen from a probability distribution \(\Pr(c)\).
+%Then, a document from class \(c\) is generated.
+%We tried a multinomial model and a Bernoulli model to model this process.
+%\begin{itemize}
+%\item \emph{Multinomial model.}  A document length \(m_d\) is chosen and \(m_d\) words \(w_{d,1}, \dotsc, w_{d,m_d}\) are chosen independently from a distribution \(\Pr(w|c)\).
+%\item \emph{Bernoulli model.}  For each word \(w\) in the vocabulary, \(w\) is added to the document with probability \(\Pr(w|c)\).
+%\end{itemize}
+%The distributions \(\Pr(c)\) and \(\Pr(w|c)\) are parameters of the model.
+%
+%
 \subsection{Linear Regression}
 
 % Modified from Cliff & Antonio's HW2 write-up
-Linear regression is a method to model the relationship between an output variable, $y$, and explanatory variables, $X$. The output variable is a linear sum of the explanatory variables multiplied by their corresponding coeffecients, represented by $\beta$. In our case, $y$ represents a review's ranking from one to five, while $X$ is the bag-of-words representation of the review text. This implies that $\beta$ represents the weight of a word's correlation to a higher review. This gives us the simple regression formula: $$y=X\beta$$
-
-In this project, we performed ordinary least squares regression. By minimizing the sum of squared residuals, we can solve for the unkown parameter vector $\beta$ using a closed form solution. $$\beta=(X'X)^{-1}X'y$$ In order to ensure that the matrix $X'X$ is invertible, we perform ridge regression. In ridge regression, we add the identity matrix, $I$, scaled by a factor, $\lambda$, to produce the following equation. $$\beta=(X'X+\lambda I)^{-1}X'y$$ We calculate this $\beta$ for a training set of review text along with their corresponding ratings which range from 1 to 5. We then evaluate our model $\beta$ on the withheld reviews in order to perform a 10-fold cross-validation.
-
-All of our linear regression code was implemented in MATLAB because of its ease-of-use and optimizations on matrix multiplications. We parsed the reviews from the tokenized binary format into a bag-of-words representation stored as a sparse matrix. Matlab uses Compressed Sparse Column format, so we actually stored the matrix $X'$ because the dictionary is very sparse. We also filtered out duplicate reviews by hashing the first ten words in a review to determine distinctness. This filtered the one million reviews to 492,130. 
-
-The actual matrix multiplications were done using the sparse $X$ matrix along with our $y$ vector and the ridge parameter. The multiplication $X'X$ takes up too much memory if we use the entire dictionary, so we chose to limit the dictionary size. We found that a dictionary of the 10,000 most frequent words gave sufficient features while also being computable using MATLAB's built-in sparse matrix multiplications. We also tried using a dictionary of 15,000 words, but only had a marginal improvement along with much slower execution. Using our 10,000 word dictionary, we calculated the performance of our matrix multiply to be 0.123 Gflops/s by dividing the number of non-zero elements in our matrices by the time to compute the multiplication. 
-
-
-Since we used ridge regression, we had the ability to tune the $\lambda$ parameter in order to get the best performance. As shown in figure \ref{fig:lambda}, we observed an AUC improvement of about .5\% between the default value of 1 and a tuned parameter of 1500. This is a fairly major difference since the AUC is at 93\% using the default value. Additionally, we also noticed a major difference in the top words when using better $\lambda$ values. Using the default value of 1, our top words included obscure words including ``\_c'', ``\_j'', ``donovan'', and ``matlock.'' When we used the tuned $\lambda$ value of 1500, the words were much more representative, as shown in table \ref{tab:words}.
-
+%Linear regression is a method to model the relationship between an output variable, $y$, and explanatory variables, $X$. The output variable is a linear sum of the explanatory variables multiplied by their corresponding coeffecients, represented by $\beta$. In our case, $y$ represents a review's ranking from one to five, while $X$ is the bag-of-words representation of the review text. This implies that $\beta$ represents the weight of a word's correlation to a higher review. This gives us the simple regression formula: $$y=X\beta$$
+%
+%In this project, we performed ordinary least squares regression. By minimizing the sum of squared residuals, we can solve for the unkown parameter vector $\beta$ using a closed form solution. $$\beta=(X'X)^{-1}X'y$$ In order to ensure that the matrix $X'X$ is invertible, we perform ridge regression. In ridge regression, we add the identity matrix, $I$, scaled by a factor, $\lambda$, to produce the following equation. $$\beta=(X'X+\lambda I)^{-1}X'y$$ We calculate this $\beta$ for a training set of review text along with their corresponding ratings which range from 1 to 5. We then evaluate our model $\beta$ on the withheld reviews in order to perform a 10-fold cross-validation.
+%
+%All of our linear regression code was implemented in MATLAB because of its ease-of-use and optimizations on matrix multiplications. We parsed the reviews from the tokenized binary format into a bag-of-words representation stored as a sparse matrix. Matlab uses Compressed Sparse Column format, so we actually stored the matrix $X'$ because the dictionary is very sparse. We also filtered out duplicate reviews by hashing the first ten words in a review to determine distinctness. This filtered the one million reviews to 492,130. 
+%
+%The actual matrix multiplications were done using the sparse $X$ matrix along with our $y$ vector and the ridge parameter. The multiplication $X'X$ takes up too much memory if we use the entire dictionary, so we chose to limit the dictionary size. We found that a dictionary of the 10,000 most frequent words gave sufficient features while also being computable using MATLAB's built-in sparse matrix multiplications. We also tried using a dictionary of 15,000 words, but only had a marginal improvement along with much slower execution. Using our 10,000 word dictionary, we calculated the performance of our matrix multiply to be 0.123 Gflops/s by dividing the number of non-zero elements in our matrices by the time to compute the multiplication. 
+%
+%
+%Since we used ridge regression, we had the ability to tune the $\lambda$ parameter in order to get the best performance. As shown in figure \ref{fig:lambda}, we observed an AUC improvement of about .5\% between the default value of 1 and a tuned parameter of 1500. This is a fairly major difference since the AUC is at 93\% using the default value. Additionally, we also noticed a major difference in the top words when using better $\lambda$ values. Using the default value of 1, our top words included obscure words including ``\_c'', ``\_j'', ``donovan'', and ``matlock.'' When we used the tuned $\lambda$ value of 1500, the words were much more representative, as shown in table \ref{tab:words}.
+%
 
 
 
@@ -274,7 +259,6 @@ We attempted to train the multiple logistic regression classifier implemented by
 \subsection{Support Vector Machines (SVMs)}
 
 %intro to svms
-SVMs  
 
 % scalanlp svm 
 
@@ -286,27 +270,27 @@ Given the complexity of choosing kernels and parameters, the package includes a 
 
 The LIBSVM scaling tool increases file size considerably for data sets with large feature matrices. This large file size, coupled with the computational resources required for SVM training on large data sets, prevented us from completing our analysis of the 
 
-\begin{tabular}{c|c|c}
-    \multicolumn{3}{c}{Unscaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
-    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
-    \hline
-    2k & 0.0 & 0.0 \\
-    10k & 0.0 & 0.0 \\
-    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
-    50k  & 0.0 & 0.0 \\
-    100k  & 0.0 & 0.0 \\
-\end{tabular}
-
-
-\begin{tabular}{c|c|c}
-    \multicolumn{3}{c}{Scaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
-    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
-    \hline
-    2k & 0.0 & 0.0 \\
-    10k & 0.0 & 0.0 \\
-    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
-\end{tabular}
-
+%\begin{tabular}{c|c|c}
+%    \multicolumn{3}{c}{Unscaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
+%    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
+%    \hline
+%    2k & 0.0 & 0.0 \\
+%    10k & 0.0 & 0.0 \\
+%    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
+%    50k  & 0.0 & 0.0 \\
+%    100k  & 0.0 & 0.0 \\
+%\end{tabular}
+%
+%
+%\begin{tabular}{c|c|c}
+%    \multicolumn{3}{c}{Scaled: Data set size, Accuracy (bag-of-words), Accuracy (expert features)}
+%    Data size & Accuracy, bag-of-words & Accuracy, expert features \\
+%    \hline
+%    2k & 0.0 & 0.0 \\
+%    10k & 0.0 & 0.0 \\
+%    22k & 0.0 & 0.0 \\ % note we chose 22k because 11k had the recipient info
+%\end{tabular}
+%
 
 
 \section{Results}
@@ -314,41 +298,41 @@ The LIBSVM scaling tool increases file size considerably for data sets with larg
 
 \subsection{Linear Regression}
 
-\begin{tabular}{c|c}
-    \multicolumn{2}{c}{Tokens most likely to be positive} \\
-    token & \(log(p_+ / p_-)\) \\
-    \hline
-    pos & 0.0 \\
-    pos2 & 0.1 \\
-\end{tabular}
-
-\begin{tabular}{c|c}
-    \multicolumn{2}{c}{Tokens most likely to be negative} \\
-    token & \(log(p_+ / p_-)\) \\
-    \hline
-    neg & 0.0 \\
-    neg2 & 0.1 \\
-\end{tabular}
-
+%\begin{tabular}{c|c}
+%    \multicolumn{2}{c}{Tokens most likely to be positive} \\
+%    token & \(log(p_+ / p_-)\) \\
+%    \hline
+%    pos & 0.0 \\
+%    pos2 & 0.1 \\
+%\end{tabular}
+%
+%\begin{tabular}{c|c}
+%    \multicolumn{2}{c}{Tokens most likely to be negative} \\
+%    token & \(log(p_+ / p_-)\) \\
+%    \hline
+%    neg & 0.0 \\
+%    neg2 & 0.1 \\
+%\end{tabular}
+%
 
 \subsection{SVMs}
 
-\begin{tabular}{c|c}
-    \multicolumn{2}{c}{Tokens most likely to be positive} \\
-    token & \(log(p_+ / p_-)\) \\
-    \hline
-    pos & 0.0 \\
-    pos2 & 0.1 \\
-\end{tabular}
-
-\begin{tabular}{c|c}
-    \multicolumn{2}{c}{Tokens most likely to be negative} \\
-    token & \(log(p_+ / p_-)\) \\
-    \hline
-    neg & 0.0 \\
-    neg2 & 0.1 \\
-\end{tabular}
-
+%\begin{tabular}{c|c}
+%    \multicolumn{2}{c}{Tokens most likely to be positive} \\
+%    token & \(log(p_+ / p_-)\) \\
+%    \hline
+%    pos & 0.0 \\
+%    pos2 & 0.1 \\
+%\end{tabular}
+%
+%\begin{tabular}{c|c}
+%    \multicolumn{2}{c}{Tokens most likely to be negative} \\
+%    token & \(log(p_+ / p_-)\) \\
+%    \hline
+%    neg & 0.0 \\
+%    neg2 & 0.1 \\
+%\end{tabular}
+%
 
 \section{Analysis}
 % Vern wants site owner perspective on how to apply classifiers
@@ -364,19 +348,12 @@ We have also recently begun to collect browser fingerprints from users based on 
 Characteristics of spam messages vary widely depending on the type of spam
 we currently lump all spam into a single category; we plan to build on the classes we mentioned in section()
 We are currently in the process of extending the moderation interface to include more specific tagging capabilities
-- certain classifiers might work better on certain types of spam
-- clustering to see how well these classes fit the spam types on the site
+%- certain classifiers might work better on certain types of spam
+%- clustering to see how well these classes fit the spam types on the site
 
 Server access logs, search logs and user viewing histories from InterPals, all of which are available to us, offer another avenue for future research. It is conceivable that certain spammers may have similar site usage patterns, in terms of HTTP request intervals, 
 
 \section{Conclusion}
-
-
-
-
-
-
-
 
 
 
