@@ -8,6 +8,11 @@
 \newcommand{\ie}{{\em i.e.,}~}
 \newcommand{\eg}{{\em e.g.,}~}
 
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+
 \newenvironment{denseitemize}{
 \begin{itemize}[topsep=2pt, partopsep=0pt, leftmargin=1.5em]
   \setlength{\itemsep}{4pt}
@@ -193,6 +198,9 @@ We decided to focus on spam in private messages for this paper, given that messa
 
 To choose a sample of relevant features, we computed statistics on the extracted features, both on the ham and spam corpora. These statistics were generated using SQL on a table created from the merged and cleaned data generated in the process described above.
 
+
+
+
 \subsection{Message Features}
 
 \textbf{Message Body \& Subject:} We extracted both the message 
@@ -208,52 +216,11 @@ of non-spam recipients (both were 47\% male to 53\% female), we found that the a
 
 \subsection{Sender Account Features}
 
-\textbf{Sender IPs:} Spammers in general had a smaller number of unique IP addresses associated with them than ham users, as per figure \ref{fig:uniqip}. The mean for spammers was 11.82 with a standard deviation of 52.52 and a median of 2, whereas ham users saw a mean of 175.51, a standard deviation of 322.19 and median of 64. This is likely due to their comparatively low length of time on the site and the fact that many legitimate users are behind NATs that yield a high number of dynamic IP addresses. One possibility for future research is to investigate the ratio of unique IPs for users as a function of the time they have been registered. Likewise, examining unique /16 network blocks instead of unique IP addresses could mitigate the influence of NATs.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/unique-ips.pdf}
-    \caption{Number of unique IP addresses associated with user account. Spam: mean 11.82, std. dev. 52.52, median 2. Ham: mean 175.51, std. dev. 322.19, median 64}
-    \label{fig:uniqip}
-\end{figure}
-
-\textbf{Sender Email:} We found that spammers were 
-
-\textbf{Sender Age:} Spam user age 
-
-\textbf{Sender Country:} The distribution of countries as stated by users on their profile and as revealed by their IP address differed remarkably between the spam and ham user groups. 48\% of spam users claimed to be from the United States, with the next most popular countries being UK, Ghana, Senegal, Germany and Canada taking combined 25\%. In contrast, only 15\% ham users claimed to be from the United States, with Russia, Korea, UK, France and Germany combining for 24\%. 
-
-figure \ref{fig:usaspam}
-figure \ref{fig:usahamfig:lambda}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/ips-usa-spam.pdf}
-    \caption{Distribution of IPs by country for spammers with profiles stating a USA location.}
-    \label{fig:usaspam}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/ips-usa-ham.pdf}
-    \caption{Distribution of IPs by country for ham users with profiles stating a USA location.}
-    \label{fig:usaham}
-\end{figure}
-
-\textbf{Sender Photos:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
-
-\textbf{Sender Birthday:}
-
-We also noticed that Afghanistan and Albania featured prominently at the 11th and 15th most popular countries f......
-
-\textbf{Sender Age:}
-
-\textbf{Sender Name:}
-
+We chose message and user account features to analyze primarily by the amount of data that we had for each them, while making sure to include the most vital account information. Table \ref{tab:feats} provides averages on a number of the account statistics that we examined. 
 \begin{table}
 \begin{tabular}{|l|l|r|r|r|}
     \hline
-    Feature & Class & Mean & Median & Std. Dev.\\
+    \textbf{Feature} & \textbf{Label} & \textbf{Mean} & \textbf{Median} & \textbf{Std. Dev.}\\
     \hline
     \multirow{2}{*}{Unique IPs} & Spam & 11.82 & 2 & 52.52\\
     & Ham & 175.51 & 64 & 322.19\\
@@ -279,7 +246,7 @@ We also noticed that Afghanistan and Albania featured prominently at the 11th an
     \multirow{2}{*}{Birth Month} & Spam & 5.85 & 5 & 3.33\\
     & Ham & 6.38 & 6 & 3.48\\
     \hline
-    \multirow{2}{*}{Description Length} & Spam & 267.30 & 87 & 483.19\\
+    \multirow{2}{*}{Profile Desc. Len.} & Spam & 267.30 & 87 & 483.19\\
     & Ham & 439.33 & 267 & 613.26\\
     \hline
     \multirow{2}{*}{\% Fields Completed} & Spam & 22.15 & 14.00 & 30.75\\
@@ -287,8 +254,101 @@ We also noticed that Afghanistan and Albania featured prominently at the 11th an
     \hline
 \end{tabular}
 \caption{Feature statistics}
-\label{featsat}
+\label{tab:feats}
 \end{table}
+
+\textbf{Sender IPs:} Spammers in general had a smaller number of unique IP addresses associated with them than ham users, as per figure \ref{fig:uniqip}. The mean for spammers was 11.82 with a standard deviation of 52.52 and a median of 2, whereas ham users saw a mean of 175.51, a standard deviation of 322.19 and median of 64. This is likely due to their comparatively low length of time on the site and the fact that many legitimate users are behind NATs that yield a high number of dynamic IP addresses. One possibility for future research is to investigate the ratio of unique IPs for users as a function of the time they have been registered. Likewise, examining unique /16 network blocks instead of unique IP addresses could mitigate the influence of NATs.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/unique-ips.pdf}
+    \caption{Number of unique IP addresses associated with user account. Spam: mean 11.82, std. dev. 52.52, median 2. Ham: mean 175.51, std. dev. 322.19, median 64}
+    \label{fig:uniqip}
+\end{figure}
+
+\textbf{Sender Email:} Users must provide email addresses upon signup. The site does not allow users to contact other 
+members before verifying that the email address provided is valid, via an account activation link sent to the signup 
+address. Subsequent changes to a user's email address on file require a similar confirmation process. Thus, we can be certain 
+that the email accounts that we extracted were in use by the senders, at least at the time of registration. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/email.pdf}
+    \caption{Domain name of email provided at signup.}
+    \label{fig:email}
+\end{figure}
+
+In the data processing step, we extracted the domain name from each email address. We found that ham user email domains 
+were distributed across top email providers in similar proportions (Hotmail, Yahoo and Gmail accounted for 22\%, 17\% and 17\% 
+respectively). For spam user accounts, Hotmail, Yahoo and Gmail accounted for 7\%, 72\% and 6\% respectively. This striking 
+predominance of Yahoo email accounts among spammers can be seen in figure \ref{fig:email}. While we have no explanation for 
+this, figure \cite{fig:ysmap} shows that Ghana and Nigeria alone account for 38\% of the IP addresses associated with these 
+Yahoo accounts. This popularity of Yahoo among West African users has been noted before\cite{burrell}, and appears to be 
+due to the early penetration of Yahoo services in the region.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/yahoo-spam.pdf}
+    \caption{IP distribution for scam accounts with Yahoo email addresses.}
+    \label{fig:yspam}
+\end{figure}
+
+\textbf{Sender Age:} Spam user age tended to be higher 
+
+\textbf{Sender Birthday:} We analyzed 
+
+We also noticed that Afghanistan and Albania featured prominently at the 11th and 15th most popular countries f......
+
+figure \ref{fig:day}
+figure \ref{fig:month}
+figure \ref{fig:drop}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dob-day.pdf}
+    \caption{Date of month from birthday submitted by user at signup.}
+    \label{fig:day}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dob-month.pdf}
+    \caption{Month of birthday as submitted by user at signup.}
+    \label{fig:month}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dropdown.png}
+    \caption{Drop-down select menu on signup form.}
+    \label{fig:drop}
+\end{figure}
+
+
+
+\textbf{Sender Country:} The distribution of countries as stated by users on their profile and as revealed by their IP address differed remarkably between the spam and ham user groups. 48\% of spam users claimed to be from the United States, with the next most popular countries being UK, Ghana, Senegal, Germany and Canada taking combined 25\%. In contrast, only 15\% ham users claimed to be from the United States, with Russia, Korea, UK, France and Germany combining for 24\%. 
+
+figure \ref{fig:usaspam}
+figure \ref{fig:usahamfig:lambda}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/ips-usa-spam.pdf}
+    \caption{Distribution of IPs by country for spammers with profiles stating a USA location.}
+    \label{fig:usaspam}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/ips-usa-ham.pdf}
+    \caption{Distribution of IPs by country for ham users with profiles stating a USA location.}
+    \label{fig:usaham}
+\end{figure}
+
+\textbf{Sender Photos:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
+
+\textbf{Sender Age:}
+
+\textbf{Sender Name:}
 
 
 \textbf{Username, Name:} While we collected these fields, we did not end up processing or analyzing them further. That said, we saw considerable repetition in the usernames of scammers and it seems that analyzing the substrings in these fields could yield useful features.
@@ -302,25 +362,32 @@ We also noticed that Afghanistan and Albania featured prominently at the 11th an
 \textbf{IP Mismatch.} This 
 
 
-\subsection{Features for Classification}
-In choosinnng 
-
-
-
-
 \section{Classification}
 
 Our goal in classification was not only to build an effective classifier for spam detection, but also to see how the presence of ``expert features", or features based on account and message metadata, could affect classifier accuracy. To this end, with of each of the classifiers we chose to implement, we evaluated performance on a bag-of-words representation of message data as well as a combination of bag-of-words with expert features.
 
+In order to train our classifiers, we had to create a feature matrix from the message and account data. We did this using 
+Perl, Spark, and Lucene analyzers. The first step was to generate a dictionary sorted by document frequencies in descending 
+order, mapping each feature (word or expert feature value) to an integer key. The second step was to create a sparse 
+matrix representation of each document (in this case, spam or ham message) and the associated features. Spark provides a 
+parallelized in-memory computation framework that dramatically reduced the time necessary to extract these features, 
+build the dictionary and generate the feature matrix. 
 
-%feature extraction tools: perl, spark, lucene analyzers
-%- feature extraction pipeline is parallelized / distributed using Spark
-%- it produces a feature matrix used later for training classifiers
-%- Stage 1 generates a dictionary sorted by document frequencies in descending order
-%- Stage 2 create bag-of-words representation of the examples, as well as “expert-features” along with the documents.
-%
-%- two feature sets: one just with bag-of-words. the other with expert features chosen by a domain expert (site owner)
-%
+We did not use all of the expert features available to us, due to time constraints. Likewise, for many expert features could 
+have a wide range of values, which would expand the dictionary size considerably. In addition to the bag-of-words from the 
+message text, we used the following features:
+\begin{itemize}
+\item Sex of sender
+\item Age of sender
+\item Age of recipient
+\item Account lifetime
+\item Month of birth 
+\item Whether sender has friends (boolean)
+\item Whether sender has photo(s) (boolean)
+\item Profile country and IP-detected country match (boolean)
+\item IP-detected country is Ghana, Nigeria, Senegal, Malaysia, Turkey, Gambia, Ivory Coast, Togo (``high-risk" countries) (boolean)
+\end{itemize}
+
 %classification:
 %- implemented 3 models: naive bayes, linear regression, and SVM.
 %- used scalanlp for SVM: Pegasos: Primal Estimated sub-GrAdient SOlver for SVM Extended with Wang, Crammer, Vucetic's work for Multiclass. The optimizer runs a stochastic subgradient descent on the primal objective using batches provided.
@@ -508,10 +575,7 @@ These features allowed us to improve the accuracy of classifiers
 
 figure \ref{fig:cprof}
 figure \ref{fig:cip}
-figure \ref{fig:day}
-figure \ref{fig:month}
 figure \ref{fig:drop}
-figure \ref{fig:email}
 figure \ref{fig:friends}
 figure \ref{fig:roclin}
 figure \ref{fig:photos}
@@ -531,35 +595,6 @@ figure \ref{fig:roc-25}
     \includegraphics[width=\linewidth]{figures/country-ip.pdf}
     \caption{Country detected by IP address using MaxMind GeoIP database.}
     \label{fig:cip}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/dob-day.pdf}
-    \caption{Date of month from birthday submitted by user at signup.}
-    \label{fig:day}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/dob-month.pdf}
-    \caption{Month of birthday as submitted by user at signup.}
-    \label{fig:month}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/dropdown.png}
-    \caption{Drop-down select menu on signup form.}
-    \label{fig:drop}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/email.pdf}
-    \caption{Domain name of email provided at signup. Users cannot send messages before 
-        activating their account via a link sent to their email address.}
-    \label{fig:email}
 \end{figure}
 
 \begin{figure}[h]
