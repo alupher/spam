@@ -192,9 +192,15 @@ This categorizations are based only on observation. Analyzing the relevant terms
 
 \section{Methodology}
 
-We chose to focus on spam in private messages for this paper, given that messages account for a majority of user spam reports. In addition to using the bag-of-words representation of the message content, we aimed to identify a subset of additional, relevant ``expert" features based on public and non-public message and account information that would augment the classifier's accuracy. We first extracted a number of fields that we expected might improve classification. 
+We chose to focus on spam in private messages for this paper, given that messages account for 
+a majority of user spam reports. In addition to using the bag-of-words representation of 
+the message content, we aimed to identify a subset of additional, relevant ``expert" features 
+based on public and non-public message and account information that would augment the classifier's 
+accuracy. We first extracted a number of fields that we expected might improve classification. 
 
-To choose a sample of relevant features, we computed statistics on the extracted features, both on the ham and spam corpora. These statistics were generated using SQL on a table created from the merged and cleaned data generated in the process described above.
+To choose a sample of relevant features, we computed statistics and generated histograms on 
+the extracted features, comparing the ham and spam corpora. These statistics were generated 
+using SQL on a table created from the merged and cleaned data generated in the process described above.
 
 \subsection{Message Features}
 
@@ -339,11 +345,37 @@ due to the early penetration of Yahoo services in the region.
     \label{fig:yspam}
 \end{figure}
 
-\textbf{Sender Age:} Spam user age tended to be higher 
+\textbf{Sender \& Recipient Age:} The age indicated on their profile tended be higher for spam user than 
+for ham users, with median ages of 31 and 22 respectively (Figure \ref{fig:sendage}). Likewise, the 
+age of message recipients was higher for spam recipients that for recipients of ham messages, with 
+median ages of 41 and 22 (Figure \ref{fig:recipage}). The sample size for spam recipient age 
+was only 11,000 messages due to late data collection. We posit that the higher ages indicated on spam profiles, 
+mirrored in recipient ages, reflects targeting of older users who are more likely to be financially 
+stable. 
 
-\textbf{Sender Birthday:} We analyzed 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/recip-age.pdf}
+    \caption{Age of message recipient as stated on user profile. Note that 2 million message spam sample 
+        had only 11,000 messages with this information.}
+    \label{fig:recipage}
+\end{figure}
 
-We also noticed that Afghanistan and Albania featured prominently at the 11th and 15th most popular countries f......
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/sender-age.pdf}
+    \caption{Age of message sender as stated on user profile. }
+    \label{fig:sendage}
+\end{figure}
+
+\textbf{Sender Birthday:} We analyzed the birthdays and birth months of ham and spam users and noticed that spam users 
+were more likely to have birthdays early in the month, and birth months early in the year. This is illustrated in 
+Figures \ref{fig:day} and \ref{fig:month}. Given the drop-down select menus on the web site's registration form, reproduced 
+Figure \ref{cite:drop}, it seems likely that this is due to an unwillingness on the part of spam users to 
+scroll down to lower options (as well as, perhaps, a hesitance to disclose real birthdates). A similar trend is 
+observed in the countries with the most discrepancies between IP-detected countries and countries stated on spam 
+user profiles, with Afghanistan and Albania comprising 19\%, despite their relatively low representation on the 
+site. 
 
 figure \ref{fig:day}
 figure \ref{fig:month}
@@ -371,7 +403,7 @@ figure \ref{fig:drop}
 
 
 
-\textbf{Sender Photos:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
+\textbf{Extra Profile Features:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
 
 \textbf{Sender Age:}
 
@@ -540,7 +572,6 @@ We tried a number of values for $\lambda$: 1, 10, 50, 100, 500, 1000, 1500, 3000
 \end{figure}
 
 
-\begin{tabular}{c|c
 
 %\begin{tabular}{c|c}
 %    \multicolumn{2}{c}{Tokens most likely to be positive} \\
@@ -665,20 +696,6 @@ figure \ref{fig:roc-25}
     \label{fig:photos}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/recip-age.pdf}
-    \caption{Age of message recipient as stated on user profile. Note that 2 million message spam sample 
-        had only 11,000 messages with this information.}
-    \label{fig:recipage}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/sender-age.pdf}
-    \caption{Age of message sender as stated on user profile. }
-    \label{fig:sendage}
-\end{figure}
 
 \begin{figure}[h]
     \centering
