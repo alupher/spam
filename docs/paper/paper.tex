@@ -3,6 +3,7 @@
 \usepackage{url}
 \usepackage{graphicx,subfigure}
 \usepackage{xspace}
+\usepackage{multirow}
 
 \newcommand{\ie}{{\em i.e.,}~}
 \newcommand{\eg}{{\em e.g.,}~}
@@ -223,6 +224,7 @@ figure \ref{fig:usahamfig:lambda}
     \label{fig:usaham}
 \end{figure}
 
+\textbf{Sender Photos:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
 
 \textbf{Sender Birthday:}
 
@@ -231,6 +233,47 @@ We also noticed that Afghanistan and Albania featured prominently at the 11th an
 \textbf{Sender Age:}
 
 \textbf{Sender Name:}
+
+\begin{table}
+\begin{tabular}{|l|l|r|r|r|}
+    \hline
+    Feature & Class & Mean & Median & Std. Dev.\\
+    \hline
+    \multirow{2}{*}{Unique IPs} & Spam & 11.82 & 2 & 52.52\\
+    & Ham & 175.51 & 64 & 322.19\\
+    \hline
+    \multirow{2}{*}{Sender Age} & Spam & 33.52 & 31 & 11.09\\
+    & Ham & 24.86 & 22 & 10.30\\
+    \hline
+    \multirow{2}{*}{Photos} & Spam & 2.09 & 1 & 8.04\\
+    & Ham & 15.69 & 6 & 43.40\\
+    \hline
+    \multirow{2}{*}{Photo Albums} & Spam & 0.91 & 1 & 0.56\\
+    & Ham & 1.89 & 1 & 2.43\\
+    \hline
+    \multirow{2}{*}{Friends} & Spam & 11.82 & 0 & 52.52\\
+    & Ham & 23.26 & 10 & 58.91\\
+    \hline
+    \multirow{2}{*}{Recipient Age} & Spam & 39.98 & 41 & 12.69\\
+    & Ham & 25.02 & 22 & 10.70\\
+    \hline
+    \multirow{2}{*}{Birth Day} & Spam & 12.31 & 10 & 8.52\\
+    & Ham & 15.01 & 15 & 8.92\\
+    \hline
+    \multirow{2}{*}{Birth Month} & Spam & 5.85 & 5 & 3.33\\
+    & Ham & 6.38 & 6 & 3.48\\
+    \hline
+    \multirow{2}{*}{Description Length} & Spam & 267.30 & 87 & 483.19\\
+    & Ham & 439.33 & 267 & 613.26\\
+    \hline
+    \multirow{2}{*}{\% Fields Completed} & Spam & 22.15 & 14.00 & 30.75\\
+    & Ham & 79.29 & 86.00 & 32.85\\
+    \hline
+\end{tabular}
+\caption{Feature statistics}
+\label{featsat}
+\end{table}
+
 
 
 
