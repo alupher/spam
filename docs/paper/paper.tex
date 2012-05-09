@@ -4,7 +4,11 @@
 \usepackage{graphicx,subfigure}
 \usepackage{xspace}
 \usepackage{multirow}
+\usepackage{amsmath}
 
+\DeclareMathOperator{\Argmax}{argmax}
+\newcommand{\PosC}{\mathrm{Spam}}
+\newcommand{\NegC}{\mathrm{Ham}}
 \newcommand{\ie}{{\em i.e.,}~}
 \newcommand{\eg}{{\em e.g.,}~}
 
@@ -55,7 +59,7 @@ and use them to train and evaluate classifiers.
 \section{Introduction}
 % Modified from project proposal
 
-Social networks of any significant size see a constant stream of spam, scams and phishing attacks. 
+Social networks of any significant size witness a constant flow of spam, scams and phishing attacks. 
 The nature of this unwanted activity can be quite diverse, specific to a site's target audience and 
 often not trivial to detect. Marketers can spam members with unwanted advertisements, fraudsters 
 lure users with advance fee frauds and other confidence tricks, while others may attempt to steal user
@@ -99,14 +103,11 @@ malicious content that exist on such sites as well as on the
 effectiveness of classifier-based approaches to identifying
 these activities.
 
-We investigated several machine learning techniques to automatically 
-detect spam and scams in the private message data, and chose to use 
-train and evaluate Na\"ive Bayes, Linear Regression, and 
-Support Vector Machine (SVM) classifiers. Our implementations used 
-a variety of tools, including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
-an in-memory distributed computing framework designed for machine 
-learning and iterative computation.
-
+We investigate several machine learning techniques to automatically 
+detect spam and scams in the private message data, and train and 
+evaluate Na\"ive Bayes, Linear Regression, and Support Vector Machine (SVM) 
+classifiers. Our implementations used a variety of tools, including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
+an in-memory distributed computing framework designed for machine learning and iterative computation.
 
 \subsection{Data sets}
 
@@ -120,9 +121,9 @@ comments, 5 million photos, and 8 million photo comments.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work} 
 
-The rapid growth of social media has made Social Networking Services (SNSs) 
-increasingly attractive targets for spam and fraud, leading to a proliferation 
-of sophisticated attacks. This trend is reflected in recent research, as papers 
+The rapid growth of social media has made SNSs increasingly attractive targets 
+for spam and fraud, leading to a proliferation of sophisticated attacks. This 
+trend is reflected in recent research, as papers 
 have focused on identifying and classifying the various types of social media spam. 
 Many of these studies employ techniques previously used to combat conventional 
 email and web spam. SNSs also provide opportunities to take advantage of user 
@@ -247,7 +248,14 @@ an adversary can efficiently learn enough about a classifier to effectively defe
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data set}
 
-For this project, we had unlimited access to data from InterPals, a SNS for users who wish to communicate with others from other countries, whether for language practice, cultural exchange or friendship. Users sign up by completing a registration form with information about themselves, including age, sex and location. After registering, users can expand their profile page to include descriptions, interests, languages they speak, etc. and upload photographs. After clicking on a link sent to their email address, a user can begin to interact with others on the site via private message, public ``wall" posts, comments on photos and on a bulletin board system.
+For this project, we had unlimited access to data from InterPals, a SNS for users who 
+wish to communicate with others from other countries, whether for language practice, cultural 
+exchange or friendship. Users sign up by completing a registration form with 
+information about themselves, including age, sex and location. After registering, users 
+can expand their profile page to include descriptions, interests, languages they speak, etc. 
+and upload photographs. After clicking on a link sent to their email address, a user can 
+begin to interact with others on the site via private message, public ``wall" posts, comments 
+on photos and on a bulletin board system.
 
 \subsection{Current Anti-Spam Measures}
 
@@ -539,8 +547,6 @@ site.
     \label{fig:drop}
 \end{figure}
 
-
-
 \textbf{Photos and Friends:} We found that both the number of ``friends" that a user has (connections 
 to other users) as well as the number of photos that user has uploaded were also indicative of their 
 spam or ham reputation. Spammers typically had one or no photos, while ham users typically had larger 
@@ -590,10 +596,12 @@ message text, we used the following features:
 \item Age of recipient
 \item Account lifetime
 \item Month of birth 
-\item Whether sender has friends , boolean
-\item Whether sender has photo(s) , boolean
-\item Profile country and IP-detected country match , boolean
-\item IP-detected country is Ghana, Nigeria, Senegal, Malaysia, Turkey, Gambia, Ivory Coast, Togo (``high-risk" countries) , boolean
+\item Whether sender has friends, boolean
+\item Whether sender has photo(s), boolean
+\item Profile country and IP-detected country match, boolean
+\item IP-detected country is a ``high-risk"\footnote{As determined by us for the purposes of this project, based on 
+the IP-detected country histogram of spam users. This list includes Ghana, Nigeria, Senegal, Malaysia, Turkey, 
+Gambia, Ivory Coast and Togo.} spam country, boolean
 \end{itemize}
 
 We initially trained and evaluated three classifiers on a small subset of the data: Na\"ive Bayes, Linear Regression and SVM. 
@@ -615,7 +623,22 @@ section containing recipient age feature data.
 
 \subsection{Na\"ive Bayes}
 
-% Modified from Reynold's HW1  write-up
+The main idea of the Naive Bayes classification algorithm is that one can calculate the probability 
+of an item belonging to a certain class by applying Bayes' theorem on the assumption that the probability 
+of one word/feature that appears in a document is independent of the probability of any other feature. 
+While is very rarely the case (hence ``naive"), Naive Bayes still performs surprisingly well in many cases.
+ 
+Using the naive Bayes classifier, for a class \(c \in \{\PosC, \NegC\}\) and document \(d\) consisting of words \(w_{d,1},\dotsc,w_{d,m_d}\) (where each word occurs at most once in the Bernoulli version), we have
+\[\Pr(c|d)=\frac{\Pr(d|c)\Pr(c)}{\Pr(d)}\]
+where
+\[\Pr(d|c)=\sum_{i=1}^{m_d}\Pr(w_i|c)\ldotp\]
+The training procedure sets \(\Pr(c)\) to be the fraction of documents with class \(c\),%
+
+\[\Pr(w|c)=\frac{n_{w,c}+\alpha}{\sum_{w'}(n_{w',c}+\alpha)}\ldotp\]
+When testing, our model classifies a document \(d\) as \(\Argmax_c\Pr(c|d)\).
+
+
+
 %We use a na\``ive Bayes model, in which the documents are generated according to the following process.  
 %First, a class \(c\) is chosen from a probability distribution \(\Pr(c)\).
 %Then, a document from class \(c\) is generated.
@@ -630,17 +653,16 @@ section containing recipient age feature data.
 
 \subsection{Na\"ive Bayes Results}
 
+The Na\"ive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
+to 77\% when expert features were added. The decline in accuracy after adding expert features is most likely 
+explained by the ``naive" assumption in this algorithm that the features are independent. Several of 
+the features that we used, \eg{account lifetime, and whether a user has friends or photos}, are in 
+fact likely to be co-dependent, leading to an overweight of these features during classification. 
 
 One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
-and the steps involved were all trivially parallelizable, which makes it convenient for large data sets.
-
-The decline in accuracy after adding expert features is most likely explained by the ``naive" assumption in this 
-algorithm that the features are independent. Several of the features that we used, \eg{account lifetime, 
-and whether a user has friends or photos}, are in fact likely to be co-dependent, leading to an overweight of 
-these features during classification. The wealth of expert features available to a SNS, many of which are 
-not independent, makes this the least compelling classifier choice that we examined.
-
-
+and the steps involved were all trivially parallelizable, which makes it convenient for large data sets. 
+However, in view of the wealth of expert features available to a SNS, many of which are not independent, this was 
+the least compelling classifier choice that we examined.
 
 \subsection{Linear Regression}
 
@@ -802,11 +824,17 @@ We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C =
 Our initial results using the Pegasos SVM solver included in ScalaNLP were lower than expected. The 
 classifier trained on the bag-of-words feature set (from 22k messages) yielded a 77\% mean accuracy 
 over 10-fold cross-validation. The addition of expert features actually decreased this accuracy to 
-51\%. Table \ref{tab:svmfeats} provides a list of top features for the bag-of-words and expert 
+51\%. 
+
+Table \ref{tab:svmfeats} provides a list of top features for the bag-of-words and expert 
 feature models. We see that for the bag-of-words classifier, the words ``year," ``new," ``happy,"  
 ``2012," ``wish," and ``you" all have high weights, which makes sense given that the ham data was 
-collected around the beginning of 2012. The table shows that three expert features: account lifetime, 
-friends and recipient age, are weighted very heavily in comparison to the remaining features. These 
+collected around the beginning of 2012. The lists include a number of stopwords, such as ``ok," 
+``me" and ``it," which should ideally not be highly weighted. While we did not remove stopwords for this 
+project, this is something that we could consider doing in the future. 
+
+The table of top terms reveals that three expert features: account lifetime, friends and 
+recipient age, are weighted very heavily in comparison to the remaining features. These 
 skewed weights (and the inability to tune the SVM solver via ScalaNLP) prompted us to test LIBSVM 
 on the same data.
 
@@ -837,7 +865,7 @@ p & 0.0862 & a & -0.01573\\
 here & -0.0844 & your & -0.01554\\
 2012 & 0.084 & F-photo\_exists & -0.0146\\
 wish & 0.0836 & the & -0.01412\\
-doing & -0.0779 & f-sex & -0.01258\\
+doing & -0.0779 & F-sex & -0.01258\\
 
 \end{tabular}
 \caption{SVM term weights (ScalaNLP Pegasos implementation). The spam term weights were the same, but opposite signs.
@@ -851,7 +879,8 @@ size from 2000 to 100k messages. Table \ref{tab:svmacc} shows results of 10-fold
 accuracy over the bag-of-words data sets was 85.73\% and 98.41\% over the bag-of-words with expert features. We 
 observed a slight decrease in performance on the bag-of-words data sets as the data size grew. Figure \ref{fig:roc-25}
 shows the AUCs and ROC curves for the 50k data sets, making clear the the significantly greater AUC resulting 
-from the addition of expert features.
+from the addition of expert features. As expected, however, both the ScalaNLP and LIBSVM implementations 
+took substantially longer to train than NB and LR.
 
 \begin{table}
 \begin{tabular}{r|r|r}
@@ -966,18 +995,13 @@ the ``wild."
 In this paper, we presented a brief overview of the breakdown of spam and scams on the InterPals web site. 
 We then examined a number of statistics on both public and private data that showed that spam users, even when 
 grouped together without regard to their specific angle of attack, share a number of characteristics that differentiate 
-them from legitimate users. To simulate an approach 
-These features allowed us to improve the accuracy of classifiers
-
-
-
-%\begin{figure}[h]
-%    \centering
-%    \includegraphics[width=\linewidth]{figures/sex.pdf}
-%    \caption{Sender sex as stated on profile.}
-%    \label{fig:sendsex}
-%\end{figure}
-%
+them from legitimate users. We trained and evaluated Na\"ive Bayes, Linear Regression and SVM classifiers on a subset 
+of the 4 million messages on which we collected feature statistics. Our evaluation compared the performance of 
+each classifier on bag-of-word representations of message text vis-\`{a}-vis the combination of bag-of-word features 
+with a number of ``expert features." We found that SVMs using an RBF kernel on LIBSVM outperformed the other 
+classifiers. In both the linear regression and SVM cases, the addition of expert features substantially increased 
+the classifier's accuracy, underscoring the impact of supplementary account-related features in detecting spam on 
+SNSs.
 
 \bibliographystyle{abbrv}
 \bibliography{paper}
