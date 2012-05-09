@@ -74,7 +74,7 @@ content that are encountered on social networks by analyzing
 experimental data available from InterPals, an international social network
 for cultural exchange and language practice. For example, the site
 attracts a wide variety of financial scams, ranging from Nigerian
-"419" scams to romance scams. Another prevalent problem is spam with
+``419" scams to romance scams. Another prevalent problem is spam with
 links to third-party websites, directing users to various porn/webcam
 sites, phishing sites or various untrustworthy online marketplaces.
 
@@ -105,7 +105,7 @@ learning and iterative computation.
 We enjoyed unrestricted access to the data of InterPals.net, a SNS with 
 over 1.3 million active members. This data includes a corpus of over a 
 100 million private messages and another 2 million messages that have been 
-labeled as spam by users. Other data includes 40 million or so "wall" 
+labeled as spam by users. Other data includes 40 million or so ``wall" 
 comments, 5 million photos, and 8 million photo comments. 
 
 
@@ -565,10 +565,10 @@ message text, we used the following features:
 \item Age of recipient
 \item Account lifetime
 \item Month of birth 
-\item Whether sender has friends (boolean)
-\item Whether sender has photo(s) (boolean)
-\item Profile country and IP-detected country match (boolean)
-\item IP-detected country is Ghana, Nigeria, Senegal, Malaysia, Turkey, Gambia, Ivory Coast, Togo (``high-risk" countries) (boolean)
+\item Whether sender has friends , boolean
+\item Whether sender has photo(s) , boolean
+\item Profile country and IP-detected country match , boolean
+\item IP-detected country is Ghana, Nigeria, Senegal, Malaysia, Turkey, Gambia, Ivory Coast, Togo (``high-risk" countries) , boolean
 \end{itemize}
 
 We initially trained and evaluated three classifiers on a small subset of the data: Na\"ive Bayes, Linear Regression and SVM. 
@@ -591,7 +591,7 @@ section containing recipient age feature data.
 \subsection{Na\"ive Bayes}
 
 % Modified from Reynold's HW1  write-up
-%We use a na\"ive Bayes model, in which the documents are generated according to the following process.  
+%We use a na\``ive Bayes model, in which the documents are generated according to the following process.  
 %First, a class \(c\) is chosen from a probability distribution \(\Pr(c)\).
 %Then, a document from class \(c\) is generated.
 %We tried a multinomial model and a Bernoulli model to model this process.
@@ -681,7 +681,7 @@ We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C =
 One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
 and the steps involved were all trivially parallelizable, which makes it convenient for large data sets.
 
-The decline in accuracy after adding expert features is most likely explained by the "naive" assumption in this 
+The decline in accuracy after adding expert features is most likely explained by the ``naive" assumption in this 
 algorithm that the features are independent. Several of the features that we used, \eg{account lifetime, 
 and whether a user has friends or photos}, are in fact likely to be co-dependent, leading to an overweight of 
 these features during classification. The wealth of expert features available to a SNS, many of which are 
@@ -690,12 +690,21 @@ not independent, makes this the least compelling classifier choice that we exami
 \subsection{Linear Regression}
 
 We tried a number of values for $\lambda$: 1, 10, 50, 100, 500, 1000, 1500, 3000. Figure \ref{fig:lambda}
+\ref{fig:roclin}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figures/linear-ridge.pdf}
     \caption{AUC based on varying lambda values for Ridge regression.}
     \label{fig:lambda}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/linear-roc.pdf}
+    \caption{Linear regression ROC curves for classifier using bag-of-words and bag-of-words with ``expert" features.}
+    \label{fig:roclin}
 \end{figure}
 
 
@@ -735,7 +744,7 @@ bonne & -0.1014 & sabina & 0.105\\
 
 % LR + expert
 \begin{table}
-\begin{tabular}{l|l||l|l}
+\begin{tabular}{l|r||l|r}
 \multicolumn{2}{c}{\textbf{Ham}} & 
 \multicolumn{2}{c}{\textbf{Spam}} \\
 \hline
@@ -764,41 +773,44 @@ new & -0.0783 & displaying & 0.0808\\
 daichi & -0.0775 & k?  & 0.0806\\
 
 \end{tabular}
-\caption{Linear Regression top features (bag-of-words + expert features) with weights. Expert features
-are denoted by the 'F-' prefix.}
+\caption{Linear Regression top features (bag-of-words \& expert features) with weights. Expert features
+are denoted by an 'F-' prefix.}
 \label{tab:lrfeats}
 \end{table}
 
 \subsection{SVMs}
 
-Our initial results using the Pegasos SVM solver included in ScalaNLP were disappointing. The 
+Our initial results using the Pegasos SVM solver included in ScalaNLP were lower than expected. The 
 classifier trained on the bag-of-words feature set (from 22k messages) yielded a 77\% mean accuracy 
 over 10-fold cross-validation. The addition of expert features actually decreased this accuracy to 
 51\%. Table \ref{tab:svmfeats} provides a list of top features for the bag-of-words and expert 
-feature models. We see that for the bag-of-words classifier, the words "year," "new," "happy,"  
-"2012," "wish," and "you" all have high weights, which makes sense given that the ham data was 
-collected around the beginning of January. 
+feature models. We see that for the bag-of-words classifier, the words ``year," ``new," ``happy,"  
+``2012," ``wish," and ``you" all have high weights, which makes sense given that the ham data was 
+collected around the beginning of 2012. The table shows that three expert features: account lifetime, 
+friends and recipient age, are weighted very heavily in comparison to the remaining features. These 
+skewed weights (and the inability to tune the SVM solver via ScalaNLP) prompted us to test LIBSVM 
+on the same data.
 
 \begin{table}
-\begin{tabular}{l|l||l|l}
+\begin{tabular}{l|r||l|r}
 \multicolumn{2}{c}{\textbf{Bag-of-Words}} & 
 \multicolumn{2}{c}{\textbf{Expert Features}} \\
 \hline
-\textbf{Feature} & \textbf{Ham Weight} & \textbf{Feature} & \textbf{Ham Weight} \\
+\textbf{Feature} & \textbf{Ham Wt.} & \textbf{Feature} & \textbf{Ham Wt.} \\
 \hline
 
-year & 0.2253 & F-account\_lifetime & -0.98\\
-new & 0.225 & F-friends & -0.3671\\
+year & 0.2253 & F-account\_lifetime & -0.9800\\
+new & 0.2250 & F-friends & -0.3671\\
 am & -0.1722 & F-recip\_age & -0.2129\\
-happy & 0.16 & F-age & -0.183\\
+happy & 0.1600 & F-age & -0.1830\\
 d & 0.1513 & i & -0.05231\\
 ok & -0.1497 & you & -0.0483\\
-yahoo & -0.136 & to & -0.04026\\
-it & 0.12 & and & -0.03636\\
-me & -0.118 & F-month\_of\_birth & -0.03452\\
+yahoo & -0.1360 & to & -0.04026\\
+it & 0.1200 & and & -0.03636\\
+me & -0.1180 & F-month\_of\_birth & -0.03452\\
 too & 0.1173 & F-country\_match & -0.0269\\
 i'm & 0.1116 & me & -0.0224\\
-haha & 0.0998 & am & -0.022\\
+haha & 0.0998 & am & -0.0220\\
 can & -0.0971 & my & -0.0209\\
 okay & -0.0947 & ? & 0.0199\\
 dear & -0.0882 & ? & 0.0191\\
@@ -814,7 +826,36 @@ Question marks indicate strings in a different character encoding.}
 \label{tab:svmfeats}
 \end{table}
 
+Our results with LIBSVM's RBF kernel were consistently better than any of the other classifiers we tested. We 
+evaluated the classifier's performance on five pairs of bag-of-words and expert feature data sets ranging in 
+size from 2000 to 100k messages. Table \ref{tab:svmacc} shows results of 10-fold cross-validation. Our mean 
+accuracy over the bag-of-words data sets was 85.73\% and 98.41\% over the bag-of-words with expert features. We 
+observed a slight decrease in performance on the bag-of-words data sets as the data size grew. Figure \ref{fig:roc-25}
+shows the AUCs and ROC curves for the 50k data sets, making clear the the significantly greater AUC resulting 
+from the addition of expert features.
 
+\begin{table}
+\begin{tabular}{r|r|r}
+\hline
+\textbf{Dataset Size} & \textbf{Bag-of-Words} & \textbf{Expert Features} \\
+\hline
+2000 & 86.70\% & 98.35\% \\
+10000 & 86.23\% & 98.49\% \\
+22000 & 86.81\% & 98.33\% \\
+50000 & 84.59\% & 98.43\% \\
+100000 & 84.33\% & 98.45\% \\
+\end{tabular}
+\caption{SVM 10-fold cross-validation accuracy over data sets of varying sizes (half spam, half ham)} 
+\label{tab:svmacc}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/roc-25.pdf}
+    \caption{LIBSVM ROC curves for classifier using bag-of-words and bag-of-words with ``expert" features on 50k messages 
+     (25k spam, 25k ham)}
+    \label{fig:roc-25}
+\end{figure}
 
 
 
@@ -879,40 +920,13 @@ These features allowed us to improve the accuracy of classifiers
 
 
 
-figure \ref{fig:cprof}
-figure \ref{fig:cip}
-figure \ref{fig:drop}
-figure \ref{fig:friends}
-figure \ref{fig:roclin}
-figure \ref{fig:photos}
-figure \ref{fig:recipage}
-figure \ref{fig:sendage}
-figure \ref{fig:sendsex}
-figure \ref{fig:roc-25}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/linear-roc.pdf}
-    \caption{Linear regression ROC curves for classifier using bag-of-words and bag-of-words with ``expert" features.}
-    \label{fig:roclin}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/roc-25.pdf}
-    \caption{LIBSVM ROC curves for classifier using bag-of-words and bag-of-words with ``expert" features on 50k messages.}
-    \label{fig:roc-25}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figures/sex.pdf}
-    \caption{Sender sex as stated on profile.}
-    \label{fig:sendsex}
-\end{figure}
-
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics[width=\linewidth]{figures/sex.pdf}
+%    \caption{Sender sex as stated on profile.}
+%    \label{fig:sendsex}
+%\end{figure}
+%
 
 \bibliographystyle{abbrv}
 \bibliography{paper}
