@@ -89,7 +89,7 @@ sites can use to detect it.
 
 \subsection{Approach}
 
-We examine in detail the types of malicious and benign
+We examine in detail the classes of malicious and benign
 content that users encounter on social networks. We do this by analyzing
 data available from InterPals, an international social network
 for cultural exchange and language practice. The site
@@ -557,7 +557,7 @@ stable.
 \textbf{Sender Birthday:} We analyzed the birthdays and birth months of ham and spam users and noticed that spam users 
 were more likely to have birthdays early in the month, and birth months early in the year. This is illustrated in 
 Figures \ref{fig:day} and \ref{fig:month}. Given the drop-down select menus on the web site's registration form, reproduced 
-Figure \ref{cite:drop}, it seems likely that this is due to an unwillingness on the part of spam users to 
+Figure \ref{fig:drop}, it seems likely that this is due to an unwillingness on the part of spam users to 
 scroll down to lower options (as well as, perhaps, a hesitance to disclose real birth dates). A similar trend is 
 observed in the countries with the most discrepancies between IP-detected countries and countries stated on spam 
 user profiles, with Afghanistan and Albania comprising 19\%, despite their relatively low representation on the 
@@ -584,7 +584,7 @@ site.
     \label{fig:drop}
 \end{figure}
 
-\textbf{Photos and Friends:} We found that both the number of ``friends" that a user has (connections 
+\textbf{Photos \& Friends:} We found that both the number of ``friends" that a user has (connections 
 to other users) as well as the number of photos that user has uploaded were also indicative of their 
 spam or ham reputation. Spammers typically had one or no photos, while ham users typically had larger 
 quantities of both, as visible in Figures \ref{fig:photos} and \ref{fig:friends}. It is important to note, 
@@ -735,7 +735,7 @@ get a slightly higher AUC by using a lower $\lambda$.
 
 Tables \ref{tab:lrfeats} and \ref{tab:lrfeatse} list the top-weighted terms for the bag-of-words and expert feature 
 models. The spam-related words appear in line with our expectations, with sex-related terms prevalent, as well as
-words that might indicate advertisements (``cafe4tune," for example, appears to be a competing SNS). Table \ref{lrfeatse} 
+words that might indicate advertisements (``cafe4tune," for example, appears to be a competing SNS). Table \ref{tab:lrfeatse} 
 shows that IP-profile country mismatch and membership of the IP-detected country in our ``high-risk" list were 
 strong predictors that a message might be spam. Likewise, whether or not a user had photos was a righ-ranking indicator 
 of ham.
