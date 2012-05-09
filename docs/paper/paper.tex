@@ -297,7 +297,8 @@ accuracy. We first extracted a number of fields that we expected might improve c
 
 To choose a sample of relevant features, we computed statistics and generated histograms on 
 the extracted features, comparing the ham and spam corpora. These statistics were generated 
-using SQL on a table created from the merged and cleaned data generated in the process described above.
+using SQL on a table created from the merged and cleaned data generated in the process described 
+above. We then chose a subset of these features to use for training and evaluating our classifiers.
 
 \subsection{Message Features}
 
@@ -306,7 +307,8 @@ each spam and ham message. The cleaning script generated two additional features
 on this. First, we counted the frequency of non-standard punctuation (we noticed that many 
 spam messages would, for example, put spaces before commas, periods and quotation marks, 
 and omit spaces after these characters). Second, we calculated the ratio of uppercase to 
-lowercase letters in the text, after observing relatively high amounts of uppercase text in spam messages.
+lowercase letters in the text, after observing relatively high amounts of uppercase text in 
+spam messages.
 %% add numbers
 
 \textbf{Recipient age, sex and country:} These fields were the age, sex and ISO 3166-1 alpha-2 code of the message 
@@ -319,7 +321,10 @@ that the mean reply rate for ham messages was 81.77\% (SD: 38.61), while it was 
 
 \subsection{Sender Account Features}
 
-We chose message and user account features to analyze primarily by the amount of data that we had for each them, while making sure to include the most vital account information. Table \ref{tab:feats} provides averages on a number of the account statistics that we examined. 
+We chose message and user account features to analyze primarily by the amount of data that 
+we had for each them, while making sure to include the most vital account information. 
+Table \ref{tab:feats} offers statistics on a number of the account features that we examined. 
+
 \begin{table}
 \begin{tabular}{|l|l|r|r|r|}
     \hline
@@ -386,7 +391,9 @@ virtually unchanged. Furthermore, only 30\% of the IP addresses of spam users wh
 claimed to be from the United States actually mapped back to a US-based ISP, with a combined 
 46\% indicating a Ghana, Nigeria and Senegal ISP (Figure \ref{fig:usaspam}). This contrasts 
 with the 73\% that US-based IP addresses comprised for ham users whose profiles stated that 
-they were in the United States (Figure \ref{fig:usaham}).
+they were in the United States (Figure \ref{fig:usaham}). During feature extraction, we also 
+generated a boolean feature (IP mismatch) indicating whether the IP-detected country and 
+the profile country matched. 
 
 \begin{figure}[h]
     \centering
@@ -409,7 +416,15 @@ they were in the United States (Figure \ref{fig:usaham}).
     \label{fig:usaham}
 \end{figure}
 
-\textbf{Sender IPs:} Spammers in general had a smaller number of unique IP addresses associated with them than ham users, as per figure \ref{fig:uniqip}. The mean for spammers was 11.82 with a standard deviation of 52.52 and a median of 2, whereas ham users saw a mean of 175.51, a standard deviation of 322.19 and median of 64. This is likely due to their comparatively low length of time on the site and the fact that many legitimate users are behind NATs that yield a high number of dynamic IP addresses. One possibility for future research is to investigate the ratio of unique IPs for users as a function of the time they have been registered. Likewise, examining unique /16 network blocks instead of unique IP addresses could mitigate the influence of NATs.
+\textbf{Sender IPs:} Spammers in general had a smaller number of unique IP addresses associated 
+with them than ham users, as per figure \ref{fig:uniqip}. The median number of IP addresses for 
+spam users was 2, whereas ham users saw a median of 64. This is likely due to the comparatively 
+shorter length of time that spammers remain on the site before being deleted by moderators (Figure 
+\label{fig:lifetime} show a histogram of the time elapsed between registration and message sending 
+time).  Similarly, we believe that many legitimate users are behind NATs, yielding a high number 
+of dynamic IP addresses. One possibility for future research is to investigate the ratio of 
+unique IPs for users as a function of the time they have been registered. Likewise, examining 
+unique /16 network blocks instead of unique IP addresses could mitigate the influence of NATs.
 
 \begin{figure}[h]
     \centering
@@ -510,7 +525,14 @@ figure \ref{fig:drop}
 
 
 
-\textbf{Extra Profile Features:} We found that the number of photos that user has uploaded is also indicative of their spam or ham reputation. Spammers 
+\textbf{Photos and Friends:} We found that both the number of ``friends" that a user has (connections 
+to other users) as well as the number of photos that user has uploaded were also indicative of their 
+spam or ham reputation. Spammers typically had one or no photos, while ham users typically had larger 
+quantities of both, as visible in Figures \ref{fig:photos} and \ref{fig:friends}. It is important to note, 
+however, that we would expect a legitimate user's average number of photos and friends to grow over 
+as a function of account lifetime. It would be quite reasonable for new ham users to have very photos 
+or friends and we plan to further examine the relationship of these attributes over account lifetimes 
+for both ham and spam users.
 
 \begin{figure}[h]
     \centering
@@ -526,26 +548,13 @@ figure \ref{fig:drop}
     \label{fig:friends}
 \end{figure}
 
-
-
-\textbf{Sender Age:}
-
-\textbf{Sender Name:}
-
-
-\textbf{Username, Name:} While we collected these fields, we did not end up processing or analyzing them further. That said, we saw considerable repetition in the usernames of scammers and it seems that analyzing the substrings in these fields could yield useful features.
-
-\textbf{Sender Sex:}
-
-\subsection{Mixed Features}
-
-\textbf{Account Lifetime.}
-
-\textbf{IP Mismatch.} This 
+\textbf{Username, Name:} While we collected these fields, we did not analyze them further, due to 
+time constraints. Nevertheless, we saw considerable repetition in the usernames of scammers 
+and it seems that analyzing the substrings in these fields could yield useful features.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Classification}
+\section{Classification \& Results}
 
 Our goal in classification was not only to build an effective classifier for spam detection, but also to see how the presence of ``expert features", or features based on account and message metadata, could affect classifier accuracy. To this end, with of each of the classifiers we chose to implement, we evaluated performance on a bag-of-words representation of message data as well as a combination of bag-of-words with expert features.
 
@@ -603,6 +612,18 @@ section containing recipient age feature data.
 %
 %
 
+\subsection{Na\"ive Bayes Results}
+
+
+One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
+and the steps involved were all trivially parallelizable, which makes it convenient for large data sets.
+
+The decline in accuracy after adding expert features is most likely explained by the ``naive" assumption in this 
+algorithm that the features are independent. Several of the features that we used, \eg{account lifetime, 
+and whether a user has friends or photos}, are in fact likely to be co-dependent, leading to an overweight of 
+these features during classification. The wealth of expert features available to a SNS, many of which are 
+not independent, makes this the least compelling classifier choice that we examined.
+
 
 
 \subsection{Linear Regression}
@@ -637,57 +658,7 @@ representations created above,
 %Since we used ridge regression, we had the ability to tune the $\lambda$ parameter in order to get the best performance. As shown in figure \ref{fig:lambda}, we observed an AUC improvement of about .5\% between the default value of 1 and a tuned parameter of 1500. This is a fairly major difference since the AUC is at 93\% using the default value. Additionally, we also noticed a major difference in the top words when using better $\lambda$ values. Using the default value of 1, our top words included obscure words including ``\_c'', ``\_j'', ``donovan'', and ``matlock.'' When we used the tuned $\lambda$ value of 1500, the words were much more representative, as shown in table \ref{tab:words}.
 %
 
-
-
-\subsection{Logistic Regression}
-
-We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, 
-but encountered a bug that prevented the model from being generated correctly. With the expectation 
-that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM 
-instead of pursuing logistic regression. 
-
-\subsection{Support Vector Machines (SVMs)}
-
-%intro to svms
-
-Support Vector Machines are a classification method \cite{boser}, \cite{cortesv95} 
-
-We initially used ScalaNLP's built-in SVM solver, which implements the Pegasos algorithm \cite{pegasos} as extended 
-by Wang, Crammer and Vucetic\cite{wang2}. The optimizer runs stochastic subgradient descent on the primal objective 
-using batches provided. However, the ScalaNLP SVM interface does not allow changing kernel functions or parameters, 
-which seems to have led to the classifier's sub-par performance.
-
-We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
-Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
-($\gamma$, $\rho$, $d$), as well as a penalty parameter ($C$). We used Perl to convert the sparse feature 
-matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package's 
-tools to perform simple scaling on the data. 
-
-Given the complexity and time-intensive nature of choosing and testing parameters, the 
-package includes a Python script that performs cross-validation to suggest appropriate 
-$\gamma$ and $C$ values for the recommended radial basis function (RBF) kernel. The RBF kernel is 
-a real-valued function such that: 
-$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
-We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C = 8$ and $\gamma = 0.0078125$.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results \& Analysis}
-
-\subsection{Na\"ive Bayes}
-
-
-One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
-and the steps involved were all trivially parallelizable, which makes it convenient for large data sets.
-
-The decline in accuracy after adding expert features is most likely explained by the ``naive" assumption in this 
-algorithm that the features are independent. Several of the features that we used, \eg{account lifetime, 
-and whether a user has friends or photos}, are in fact likely to be co-dependent, leading to an overweight of 
-these features during classification. The wealth of expert features available to a SNS, many of which are 
-not independent, makes this the least compelling classifier choice that we examined.
-
-\subsection{Linear Regression}
+\subsection{Linear Regression Results}
 
 We tried a number of values for $\lambda$: 1, 10, 50, 100, 500, 1000, 1500, 3000. Figure \ref{fig:lambda}
 \ref{fig:roclin}
@@ -778,7 +749,39 @@ are denoted by an 'F-' prefix.}
 \label{tab:lrfeats}
 \end{table}
 
-\subsection{SVMs}
+\subsection{Logistic Regression}
+
+We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, 
+but encountered a bug that prevented the model from being generated correctly. With the expectation 
+that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM 
+instead of pursuing logistic regression. 
+
+\subsection{Support Vector Machines (SVMs)}
+
+%intro to svms
+
+Support Vector Machines are a classification method \cite{boser}, \cite{cortesv95} 
+
+We initially used ScalaNLP's built-in SVM solver, which implements the Pegasos algorithm \cite{pegasos} as extended 
+by Wang, Crammer and Vucetic\cite{wang2}. The optimizer runs stochastic subgradient descent on the primal objective 
+using batches provided. However, the ScalaNLP SVM interface does not allow changing kernel functions or parameters, 
+which seems to have led to the classifier's sub-par performance.
+
+We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
+Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
+($\gamma$, $\rho$, $d$), as well as a penalty parameter ($C$). We used Perl to convert the sparse feature 
+matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package's 
+tools to perform simple scaling on the data. 
+
+Given the complexity and time-intensive nature of choosing and testing parameters, the 
+package includes a Python script that performs cross-validation to suggest appropriate 
+$\gamma$ and $C$ values for the recommended radial basis function (RBF) kernel. The RBF kernel is 
+a real-valued function such that: 
+$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
+We ran this script on a subset of 2500 ham and 2500 spam messages to obtain $C = 8$ and $\gamma = 0.0078125$.
+
+
+\subsection{SVM Results}
 
 Our initial results using the Pegasos SVM solver included in ScalaNLP were lower than expected. The 
 classifier trained on the bag-of-words feature set (from 22k messages) yielded a 77\% mean accuracy 
@@ -881,9 +884,15 @@ the Linear Regression and SVM feature weight tables, words typically associated 
 undue wieght during classification.  We plan to address this issue by creating a new ham message corpus 
 through sampling that matches the temporal distribution of spam messages more closely.
 
+Another direction for future research would be to examine data other than messages. We have access to millions 
+of wall posts and photo comments, making it possible to investigate the characteristics of spam in these genres. 
+Wall posts and comments tend to be comparatively short, so we might 
+
 \subsection{Spam Grouping}
 
-As a part of this project, we performed some qualitative analysis on spam and differentiated between the major categories of undesirable messages found on this SNS. However, we 
+As a part of this project, we performed some qualitative analysis on spam and differentiated between 
+some major categories of undesirable messages that we observed on the InterPals web site. However, we would 
+like to gain a better understanding of the relative volume of each type of scam
 
 Characteristics of spam messages vary widely depending on the type of spam
 we currently lump all spam into a single category; we plan to build on the classes we mentioned in section()
@@ -898,7 +907,8 @@ In this project, we chose only a small subset of ``expert" features to use. Howe
 
 We have also recently begun to collect browser fingerprints from users based on user agent and JavaScript-acquired browser plugin details, time zone, screen size, color depth, system fonts, keyboard layout and locale information. Subsequent classifiers could leverage this information either as a hash that effectively tags individual known spammers or in part, adding features based on time zone or keyboard layout.
 
-It is also anecdotally clear from moderator log messages that spammers re-use their profile photos and these photos are often of celebrities, porn stars or simply stock photos. Hashing these images 
+It is also anecdotally clear from moderator log messages that spammers re-use their profile photos and 
+these photos are often of celebrities or simply stock photos. Hashing these images 
 
 
 Server access logs, search logs and user viewing histories from InterPals, all of which are available to us, offer another avenue for future research. It is conceivable that certain spammers may have similar site usage patterns, in terms of HTTP request intervals, 
