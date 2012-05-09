@@ -122,10 +122,10 @@ learning and iterative computation.
 \subsection{Data sets}
 
 We enjoyed unrestricted access to the data of InterPals.net, a SNS with 
-over 1.3 million active members. This data includes a corpus of over a 
+over 1.3 million active members. The data from this site includes a corpus of over a 
 100 million private messages and another 2 million messages that have been 
-labeled as spam by users. Other data includes 40 million or so ``wall" 
-comments, 5 million photos, and 8 million photo comments. 
+labeled as spam  and deleted by users. Other data includes 40 million or so ``wall" 
+comments, 5 million photos and 8 million photo comments. 
 
 \section{Related Work} 
 
@@ -522,7 +522,7 @@ respectively). For spam user accounts, Hotmail, Yahoo and Gmail accounted for 7\
 predominance of Yahoo email accounts among spammers can be seen in Figure \ref{fig:email}. While we have no certain 
 explanation for this, Figure \ref{fig:yspam} shows that Ghana and Nigeria alone account for 38\% of the IP 
 addresses associated with these Yahoo accounts. This popularity of Yahoo among West African users has 
-been noted before\cite{burrell}, and appears to be due to the early penetration of Yahoo services in the region.
+been noted before\cite{burrell} and appears to be due to the early penetration of Yahoo services in the region.
 
 \begin{figure}[h]
     \centering
@@ -623,7 +623,7 @@ logistic regression and support vector machines, all of which have been used wit
 success for email, web and social spam classification, as described in our overview of related work.
 
 In order to train our classifiers, we created a feature matrix from the message and account data. 
-We did this using Perl, Spark, and Lucene analyzers. The first step was to generate a dictionary sorted by document 
+We did this using Perl, Spark and Lucene analyzers. The first step was to generate a dictionary sorted by document 
 frequencies in descending order, mapping each feature (word or expert feature value) to an integer 
 key. The second step was to create a sparse matrix representation of each document (in this case, 
 spam or ham message) and the associated features. Spark provides a parallelized in-memory computation 
@@ -673,7 +673,7 @@ When testing, our model classifies a document \(d\) as \(\Argmax_c\Pr(c|d)\).
 The Naive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
 to 77\% when expert features were added. The decline in accuracy after adding expert features is most likely 
 explained by the ``naive" assumption in this algorithm that the features are independent. Several of 
-the features that we used, \eg{account lifetime, and whether a user has friends or photos}, are in 
+the features that we used, \eg{account lifetime and whether a user has friends or photos}, are in 
 fact likely to be co-dependent, leading to an overweight of these features during classification. 
 
 One of the advantages of the Naive Bayes classifier was that it took very little time to train the classifier, 
