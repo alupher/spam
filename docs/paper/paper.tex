@@ -190,11 +190,11 @@ Unfortunately, the differing characteristics of various social networks \eg the 
 of messages in Facebook vs. Twitter, can reduce the benefits of sharing spam corpora 
 across diverse sites.
 
-Facebook \cite{stein} provides an overview of their ``immune system" defences 
+Facebook \cite{stein} provides an overview of their ``immune system" defenses 
 against phishing, fraud and spam. The system is composed of classifier services, an 
 ML-derived Feature Extraction Language (FXL), feature loops to aggregate and prepare 
 features for classification and a policy engine to take action on suspected misuse. While 
-the discussion remains high-level and includes few implemention particulars, it does 
+the discussion remains high-level and includes few implementation particulars, it does 
 include significant detail on the various types and characteristics of undesirable 
 activity on the site, including fake profiles, harassment, compromised accounts, malware 
 and spam. 
@@ -235,7 +235,8 @@ determined by URL features, page content and hosting properties of the target do
 
 Blog comment spam have also attracted considerable attention from researchers who 
 have applied machine learning \cite{kolari, nag} and NLP \cite{mishne} techniques to the 
-problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on social bookmarking sites.
+problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on 
+social bookmarking sites.
 
 \subsection{Machine Learning and Data Mining}
 
@@ -551,7 +552,7 @@ stable.
 were more likely to have birthdays early in the month, and birth months early in the year. This is illustrated in 
 Figures \ref{fig:day} and \ref{fig:month}. Given the drop-down select menus on the web site's registration form, reproduced 
 Figure \ref{cite:drop}, it seems likely that this is due to an unwillingness on the part of spam users to 
-scroll down to lower options (as well as, perhaps, a hesitance to disclose real birthdates). A similar trend is 
+scroll down to lower options (as well as, perhaps, a hesitance to disclose real birth dates). A similar trend is 
 observed in the countries with the most discrepancies between IP-detected countries and countries stated on spam 
 user profiles, with Afghanistan and Albania comprising 19\%, despite their relatively low representation on the 
 site. 
@@ -604,7 +605,6 @@ for both ham and spam users.
 time constraints. Nevertheless, we saw considerable repetition in the usernames of scammers 
 and it seems that analyzing the substrings in these fields could yield useful features.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Classification \& Results}
 
 Our goal in classification was not only to build an effective classifier for spam detection, 
@@ -676,14 +676,14 @@ the least compelling classifier choice that we examined.
 
 Linear regression is a method to model the relationship between an output variable, 
 $y$, and explanatory variables, $X$. The output variable is a linear sum of the explanatory 
-variables multiplied by their corresponding coeffecients, represented by $\beta$. 
+variables multiplied by their corresponding coefficients, represented by $\beta$. 
 In our case, $y$ represents a message's label as spam or ham (1 or 0), 
 while $X$ is the feature vector, a bag-of-words representation of the message text and expert features. 
 This implies that $\beta$ represents the weight of a feature's correlation to whether 
 the message is spam or not. This gives us the simple regression formula: $$y=X\beta$$
 
 In this project, we performed ordinary least squares regression. By minimizing the sum of squared 
-residuals, we can solve for the unkown parameter vector $\beta$ using a closed form solution. 
+residuals, we can solve for the unknown parameter vector $\beta$ using a closed form solution. 
 $$\beta=(X'X)^{-1}X'y$$ In order to ensure that the matrix $X'X$ is invertible, we perform ridge regression. 
 In ridge regression, we add the identity matrix, $I$, scaled by a factor, $\lambda$, to 
 produce the following equation. $$\beta=(X'X+\lambda I)^{-1}X'y$$
@@ -695,7 +695,7 @@ We repeat this process with the set that includes expert features.
 All of our linear regression code was implemented in MATLAB because of its ease-of-use 
 and optimizations on matrix multiplications. We read in the text-based feature dictionaries and the feature matrix
 representations created above, which is stored as a sparse matrix (efficiently represented in Matlab as 
-in Cmmpressed Sparse Column format).
+in Compressed Sparse Column format).
 
 We used ridge regression, which gave us the opportunity to tune a $\lambda$ parameter in order to 
 regularize the vector components for better performance. 
@@ -845,8 +845,8 @@ over 10-fold cross-validation. The addition of expert features actually decrease
 Table \ref{tab:svmfeats} provides a list of top features for the bag-of-words and expert 
 feature models. We see that for the bag-of-words classifier, the words ``year," ``new," ``happy,"  
 ``2012," ``wish," and ``you" all have high weights, which makes sense given that the ham data was 
-collected around the beginning of 2012. The lists include a number of stopwords, such as ``ok," 
-``me" and ``it," which should ideally not be highly weighted. While we did not remove stopwords for this 
+collected around the beginning of 2012. The lists include a number of stop words, such as ``ok," 
+``me" and ``it," which should ideally not be highly weighted. While we did not remove stop words for this 
 project, this is something that we could consider doing in the future. 
 
 The table of top terms reveals that three expert features: account lifetime, friends and 
@@ -932,7 +932,7 @@ extracting the data, the coincidental timing with a global holiday seems to have
 skew in the bag-of-words features. In contrast, the majority of messages in the spam corpus span a period of 
 7 months, with only a slight linear increase in volume over the interval.  Consequently, as seen in 
 the linear regression and SVM feature weight tables, words typically associated with the New Year gained 
-undue wieght during classification.  We plan to address this issue by creating a new ham message corpus 
+undue weight during classification.  We plan to address this issue by creating a new ham message corpus 
 through sampling that matches the temporal distribution of spam messages more closely.
 
 Another direction for future research would be to examine data other than messages. We have access to millions 
