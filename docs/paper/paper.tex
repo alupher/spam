@@ -23,7 +23,8 @@
 
 \begin{document}
 
-\title{Detecting Spam on Social Networking Sites}
+\title{Feature Selection and Classification of \\
+    Spam on Social Networking Sites}
 
 \numberofauthors{3}
 \author{
@@ -40,9 +41,12 @@ Social networking sites (SNSs) see a variety of spam and scams targeted at
 their users. In contrast to the more limited amounts of secondary information 
 available when analyzing email spam, spam on SNSs is accompanied by a wealth 
 of data on the sender, which can be used to build more accurate detection mechanisms. 
-We analyze public and private data from a popular social network in order to 
-gain insight into the various features spam messages and the accompanying user 
-accounts and profiles available to site operators. By examining the ....
+We analyze 4 million private messages as well as other public and private data from 
+a popular social network in order to gain insight into the various features of 
+spam messages and the accompanying user accounts data available to site operators. 
+We use these insights to choose features that best differentiate spammers from 
+legitimate, ``ham," users.  Finally, we extract these features from the site's data 
+and use them to train and evaluate classifiers.
 \end{abstract}
 
 
@@ -51,24 +55,28 @@ accounts and profiles available to site operators. By examining the ....
 \section{Introduction}
 % Modified from project proposal
 
-Social networks of any significant size see constant spam, scams
-and phishing attacks. The nature of these attacks can be quite diverse
-and difficult detect. Marketers can spam members with unwanted
-advertisements, fraudsters lure users with advance fee frauds and
-other confidence tricks, while others may attempt to steal user
-information by directing users to external phishing pages. 
-Sites with global reach see communication among its members in a 
-number foreign languages with varying levels
-of ability. This means that much benign content shares characteristics
-like misspellings, awkward phrases, etc. that might have made certain
-types of common frauds and spam more easy to distinguish on US-based
-(or English-language) sites.
+Social networks of any significant size see a constant stream of spam, scams and phishing attacks. 
+The nature of this unwanted activity can be quite diverse, specific to a site's target audience and 
+often not trivial to detect. Marketers can spam members with unwanted advertisements, fraudsters 
+lure users with advance fee frauds and other confidence tricks, while others may attempt to steal user
+information by directing users to external phishing pages. In contrast to email spam, social spam 
+has a more personal component, since both spammers and legitimate users (``ham" users) have accompanying 
+profiles with descriptive information. 
+
+Sites with global reach see communication among its members in a number foreign languages with 
+varying levels of ability. This means that much benign content shares characteristics like misspellings, 
+awkward phrases, etc. that might have made certain types of common frauds and spam more easy to 
+distinguish on US-based (or English-language) sites.
+
+Recent research has begun to evaluate Email spam and techniques with which to combat it has been studied 
+extensively. Like
+
+
+
 % focus on extra impact of non-public features vs. public (bag-of-words)
 
 \subsection{Approach}
 
-Email spam and techniques with which to combat it has been studied 
-extensively. Like
 This paper examines in detail the types of malicious and benign
 content that are encountered on social networks by analyzing
 experimental data available from InterPals, an international social network
@@ -270,20 +278,31 @@ data and merged them into text files for feature extraction.
 
 \subsection{Categories of Spam}
 
-In the course of collecting the data, we observed a number of different types of undesirable messages. Our ongoing observation of spam on the InterPals website provided direct intuition into the major classes of unwanted behavior that we classified as spam for this project. We noted the following broad categories:
+In the course of collecting the data, we observed a number of different types of 
+undesirable messages. Our ongoing observation of spam on the InterPals website provided 
+direct intuition into the major classes of unwanted behavior that we classified as spam for 
+this project. We noted the following broad categories:
 
-\textbf{Advance Fee Fraud} We observed this scam to come in various flavors.  (inheritance, lottery,  etc)
-\textbf{Romance Scams:} These 
-\textbf{Sexual Solicitation}
-\textbf{Porn Ads}
-\textbf{Advertising External Sites}
-\textbf{Webcam Ads}
-\textbf{Money Muling}
-\textbf{Begging \& Gift Requests}
-\textbf{Business Proposals}
+\begin{itemize}
+\item \textbf{Advance Fee Fraud} We observed this scam to come in various flavors.  (inheritance, lottery,  etc)
+\item \textbf{Romance Scams:} These 
+\item \textbf{Sexual Solicitation}
+\item \textbf{Porn Ads}
+\item \textbf{Advertising External Sites}
+\item \textbf{Webcam Ads}
+\item \textbf{Money Muling}
+\item \textbf{Begging \& Gift Requests}
+\item \textbf{Business Proposals}
+\end{itemize}
+
+These categorizations are based only on cursory manual observation of a sample of several tens of thousands 
+spam-labeled messages. We plan to quantify the volume of messages in each of these categories and 
+attempt to provide a finer granularity of categorization in future research. 
+
+%Analyzing the relevant terms in log comments entered by moderators when 
+%deleting spammer accounts provides the following breakdown:
 
 
-This categorizations are based only on observation. Analyzing the relevant terms in log comments entered by moderators when deleting spammer accounts provides the following breakdown:
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -863,13 +882,6 @@ from the addition of expert features.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Analysis}
-% Vern wants site owner perspective on how to apply classifiers
-From a site's perspective, ...
-
-- plan to implement SVM, despite speed tradeoff 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
 
 \subsection{Data Collection}
@@ -886,38 +898,70 @@ through sampling that matches the temporal distribution of spam messages more cl
 
 Another direction for future research would be to examine data other than messages. We have access to millions 
 of wall posts and photo comments, making it possible to investigate the characteristics of spam in these genres. 
-Wall posts and comments tend to be comparatively short, so we might 
+Wall posts and comments tend to be comparatively short, which should present a slightly different classification 
+problem.
+
+We have also recently observed spammers attacking the report system by reporting large numbers of legitimate users 
+with complaints consisting of nonsensical text or form messages. In addition to offering another application for 
+classifiers, the data we are collecting should offer a window into the retaliatory techniques of miscreants on 
+SNSs.
 
 \subsection{Spam Grouping}
 
 As a part of this project, we performed some qualitative analysis on spam and differentiated between 
 some major categories of undesirable messages that we observed on the InterPals web site. However, we would 
-like to gain a better understanding of the relative volume of each type of scam
+like to gain a better understanding of the relative volume of each type of scam. To this end, we plan to 
+experiment with clustering algorithms to attempt to identify and quantify subclasses of spam. 
 
-Characteristics of spam messages vary widely depending on the type of spam
-we currently lump all spam into a single category; we plan to build on the classes we mentioned in section()
-We are currently in the process of extending the moderation interface to include more specific tagging capabilities
-%- certain classifiers might work better on certain types of spam
-%- clustering to see how well these classes fit the spam types on the site
+Furthermore, characteristics of spam messages vary substantially depending on the type of spam or scam in question. 
+The classifiers that we trained and evaluated in this project all spam messages as a single category. We are currently 
+investigating multiclass classifiers as a potential tool to identify the type of 
+spam in question with greater precision. Specifically, we are considering multiclass SVMs, which reduce 
+multiclass problems into multiple binary classification problems.\cite{duan} 
 
+From a site's perspective, this finer granularity is desirable not only 
+because specialty classifiers could be trained to recognize specific classes of spam, but also in order to 
+trigger different courses of action (\eg automatic account deletion, warning messages, reports to human moderators) 
+based on the class and probability of spam detected.
+
+We are currently extending the moderation interface to include more specific tagging capabilities, which should aid 
+in generating labels for multiclass classifiers and for seeding semi-supervised clustering algorithms (see Basu et al. 
+\cite{basu}).
 
 \subsection{Features}
 
-In this project, we chose only a small subset of ``expert" features to use. However, we believe that it would be beneficial to train and evaluate the classifiers on a wider range of features. The features would include both the ones we extracted in this project but omitted from the classifier features matrices, as well as new features. Adding N-grams and message similarity tests seem particularly promising. N-grams would allow the classifier to take into account certain phrases \eg{``Western Union" or ``money transfer"}. 
+In this project, we chose only a small subset of ``expert" features to use. However, we believe that 
+it would be beneficial to train and evaluate the classifiers on a wider range of features. The features 
+would include both the ones we extracted in this project but omitted from the classifier features matrices, 
+as well as new features. Adding N-grams and message similarity tests seem particularly promising. 
+N-grams would allow the classifier to take into account certain phrases \eg{``Western Union" or ``money transfer"}. 
 
-We have also recently begun to collect browser fingerprints from users based on user agent and JavaScript-acquired browser plugin details, time zone, screen size, color depth, system fonts, keyboard layout and locale information. Subsequent classifiers could leverage this information either as a hash that effectively tags individual known spammers or in part, adding features based on time zone or keyboard layout.
+We have also recently begun to collect browser fingerprints from users based on user agent 
+and JavaScript-acquired browser plugin details, time zone, screen size, color depth, system fonts, 
+keyboard layout and locale information. Subsequent classifiers could leverage this information either 
+as a hash that effectively tags individual known spammers or in part, adding features based on 
+time zone or keyboard layout.
 
 It is also anecdotally clear from moderator log messages that spammers re-use their profile photos and 
-these photos are often of celebrities or simply stock photos. Hashing these images 
+these photos are often of celebrities or simply stock photos. Fingerprinting and perceptual hash techniques 
+such as Marr wavelet, discrete cosine transform (DCT), color histograms, etc., which provided by the 
+pHash library, \footnote{http://www.phash.org} seem to promising in detecting image re-use. 
 
 
-Server access logs, search logs and user viewing histories from InterPals, all of which are available to us, offer another avenue for future research. It is conceivable that certain spammers may have similar site usage patterns, in terms of HTTP request intervals, 
+Server access logs, search logs and user viewing histories from InterPals, all of which 
+are available to us, offer another avenue for future research. It is conceivable that certain 
+spammers may have similar site usage patterns, in terms of HTTP request intervals, search queries, 
+and so on, which might prove useful in their detection.
 
+\subsection{Site Implementation}
 
-\subsection{Testing \& Evaluation}
-
-- test SVM and other classifiers on newer data
-- 
+Given the promising results of SVM classifiers in this project, we plan to test and implement a classifier that will 
+be integrated into the site application code itself. Initially, we envision this as a system that automatically flags 
+potential spam messages and brings them to the attention of human moderators. Moderators will then be able to manually 
+make a decision as to whether the messages are spam or not. In order to diminish the effect of subjectivity or moderator 
+error, each message will be vetted by several moderators, and the majority decision will be accepted as ground ``truth." 
+Recording these messages and moderator decision will allow us to further evaluate the performance of these classifiers in 
+the ``wild."
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
