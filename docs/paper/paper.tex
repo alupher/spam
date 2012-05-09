@@ -88,9 +88,9 @@ sites can use to detect it.
 
 \subsection{Approach}
 
-This paper examines in detail the types of malicious and benign
-content that are encountered on social networks by analyzing
-experimental data available from InterPals, an international social network
+We examine in detail the types of malicious and benign
+content that users encounter on social networks. We do this by analyzing
+data available from InterPals, an international social network
 for cultural exchange and language practice. For example, the site
 attracts a wide variety of financial scams, ranging from Nigerian
 ``419" scams to romance scams. Another prevalent problem is spam with
@@ -99,22 +99,24 @@ sites, phishing sites or various untrustworthy online marketplaces.
 
 We examine various methods of detecting and preventing abuse
 on the site, including those measures that have already been taken
-(e.g. various heuristics including IP/location anomaly detection,
+(\eg various heuristics including IP-based location anomaly detection,
 frequency capping, duplicate account detection, etc.). We then analyze 
-message and user account data points to try to differentiate legitimate users
-from malicious ones. By mining this data, we extract features 
-to build and evaluate classifiers that can detect unwanted behavior 
+message and user account data to try to identify characteristics that 
+best differentiate legitimate users from malicious ones. By mining this data, 
+ we extract features to build and evaluate classifiers that can detect unwanted behavior 
 programmatically. The large volume of data available to us, although we do 
 not use all of it, provides a unique perspective both on the types of
 malicious content that exist on such sites as well as on the
 effectiveness of classifier-based approaches to identifying
 these activities.
 
-We investigate several machine learning techniques to automatically 
-detect spam and scams in the private message data, and train and 
-evaluate Na\"ive Bayes, Linear Regression, and Support Vector Machine (SVM) 
-classifiers. Our implementations used a variety of tools, including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
-an in-memory distributed computing framework designed for machine learning and iterative computation.
+This paper investigate several machine learning techniques to 
+detect spam in private messages. We train and evaluate Na\"ive Bayes, 
+linear regression, and support vector machine (SVM) 
+classifiers. Our implementations used a variety of tools, 
+including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
+an in-memory distributed computing framework designed for machine 
+learning and iterative computation.
 
 \subsection{Data sets}
 
@@ -612,7 +614,7 @@ the IP-detected country histogram of spam users. This list includes Ghana, Niger
 Gambia, Ivory Coast and Togo.} spam country, boolean
 \end{itemize}
 
-We initially trained and evaluated three classifiers on a small subset of the data: Na\"ive Bayes, Linear Regression and SVM. 
+We initially trained and evaluated three classifiers on a small subset of the data: Na\"ive Bayes, linear regression and SVM. 
 We chose an 11k spam and 11k ham sample for training, using this particular sample size due to the size of the spam corpus 
 section containing recipient age feature data.  
 
@@ -752,7 +754,7 @@ snail & -0.1059 & sand & 0.1072\\
 direct & -0.1052 & check & 0.1058\\
 bonne & -0.1014 & sabina & 0.105\\
 \end{tabular}
-\caption{Linear Regression top features (bag-of-words) with weights}
+\caption{linear regression top features (bag-of-words) with weights}
 \label{tab:lrfeats}
 \end{table}
 
@@ -786,7 +788,7 @@ learn & -0.0784 & model & 0.0826\\
 new & -0.0783 & displaying & 0.0808\\
 daichi & -0.0775 & k?  & 0.0806\\
 \end{tabular}
-\caption{Linear Regression top features (bag-of-words \& expert features) with weights. Expert features
+\caption{linear regression top features (bag-of-words \& expert features) with weights. Expert features
 are denoted by an `F-' prefix.}
 \label{tab:lrfeatse}
 \end{table}
@@ -927,7 +929,7 @@ December 23, 2011 to January 1, 2012. While we chose the corpus' start date as e
 extracting the data, the coincidental timing with a global holiday seems to have introduced unusual 
 skew in the bag-of-words features. In contrast, the majority of messages in the spam corpus span a period of 
 7 months, with only a slight linear increase in volume over the interval.  Consequently, as seen in 
-the Linear Regression and SVM feature weight tables, words typically associated with the New Year gained 
+the linear regression and SVM feature weight tables, words typically associated with the New Year gained 
 undue wieght during classification.  We plan to address this issue by creating a new ham message corpus 
 through sampling that matches the temporal distribution of spam messages more closely.
 
@@ -1004,7 +1006,7 @@ the ``wild."
 In this paper, we presented a brief overview of the breakdown of spam and scams on the InterPals web site. 
 We then examined a number of statistics on both public and private data that showed that spam users, even when 
 grouped together without regard to their specific angle of attack, share a number of characteristics that differentiate 
-them from legitimate users. We trained and evaluated Na\"ive Bayes, Linear Regression and SVM classifiers on a subset 
+them from legitimate users. We trained and evaluated Na\"ive Bayes, linear regression and SVM classifiers on a subset 
 of the 4 million messages on which we collected feature statistics. Our evaluation compared the performance of 
 each classifier on bag-of-word representations of message text vis-\`{a}-vis the combination of bag-of-word features 
 with a number of ``expert features." We found that SVMs using an RBF kernel on LIBSVM outperformed the other 
