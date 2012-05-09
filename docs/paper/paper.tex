@@ -40,9 +40,9 @@ Reynold Xin\\\\
 \maketitle
 \begin{abstract}
 Social networking sites (SNSs) see a variety of spam and scams targeted at 
-their users. In contrast to the more limited amounts of secondary information 
-available when analyzing email spam, spam on SNSs is accompanied by a wealth 
-of data on the sender, which can be used to build more accurate detection mechanisms. 
+their users. In contrast to the limited amounts of information available beyond 
+message text and headers when analyzing email spam, spam on SNSs is often accompanied 
+by a wealth of data on the sender, which can be used to build more accurate detection mechanisms. 
 We analyze 4 million private messages as well as other public and private data from 
 a popular social network in order to gain insight into the various features of 
 spam messages and the accompanying user accounts data available to site operators. 
@@ -57,7 +57,7 @@ and use them to train and evaluate classifiers.
 
 Social networks of any significant size witness a constant flow of spam, scams and phishing attacks. 
 The nature of this unwanted activity, which we henceforth refer to collectively as ``spam" can be 
-quite diverse, specific to a site's target audience and often not trivial to detect. Marketers 
+quite diverse, specific to a site's target audience and often not easily detectable. Marketers 
 spam members with unwanted advertisements, fraudsters lure users with advance fee frauds and 
 other confidence tricks, while others may attempt to steal user information by directing users 
 to external phishing pages. 
@@ -288,7 +288,7 @@ contact.
 %- Users are able to filter messages by age, sex, continent and country. At this time, 
 %- Duplicate account detection
 
-\subsection{Spam Set}
+\subsection{Spam Data Set}
 
 At the beginning of this research project, slightly two million messages had 
 been flagged by moderators as spam. We extracted the contents of exactly 2 million 
@@ -307,7 +307,7 @@ In addition to using SQL to extract the data, we wrote Perl scripts to clean the
 messages and prepare data for further processing. The methodology section (X) offers more details 
 on precisely which items of data were collected and why.
 
-\subsection{Ham Set}
+\subsection{Ham Data Set}
 
 Unlike spam messages, we did not have access to a comparable corpus of human-labeled ham 
 messages. To simplify the labeling of ham messages, we made the assumption that messages remaining in 
@@ -605,7 +605,7 @@ for both ham and spam users.
 time constraints. Nevertheless, we saw considerable repetition in the usernames of scammers 
 and it seems that analyzing the substrings in these fields could yield useful features.
 
-\section{Classification \& Results}
+\section{Classifiers \& Results}
 
 Our goal in classification was not only to build an effective classifier for spam detection, 
 but also to see how the presence of ``expert features", or features based on account and 
