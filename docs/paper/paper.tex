@@ -108,7 +108,7 @@ effectiveness of classifier-based approaches to identifying
 these activities.
 
 This paper investigate several machine learning techniques to 
-detect spam in private messages. We train and evaluate Na\"ive Bayes, 
+detect spam in private messages. We train and evaluate Naive Bayes, 
 linear regression, and support vector machine (SVM) 
 classifiers. Our implementations used a variety of tools, 
 including Matlab, ScalaNLP, LIBSVM, Lucene and Spark, 
@@ -203,7 +203,7 @@ and spam.
 In contrast to research that focuses on dynamically detecting spam based on user 
 activity, Irani et al. \cite{irani} show that static features associated with user signups 
 on MySpace are enough to train an effective social spam classifier. They note that
-C4.5 decision tree algorithms provide better performance than Na\"ive Bayes in this case. 
+C4.5 decision tree algorithms provide better performance than Naive Bayes in this case. 
 As in other works, this only examines publicly available profile information collected 
 by social honeypots. Private data collected on users including browser features, IP addresses 
 and geographic location would conceivably improve classifier performance substantially.
@@ -247,12 +247,12 @@ independent. However, in the case of spam, fraud and other malicious content,
 users will often modify their behavior to evade detection, leading to degraded 
 classifier performance and the need to re-train classifiers frequently. Several 
 researchers tackle this adversarial problem. Dalvi et al. \cite{dalvi} offer a 
-modified Na\"ive Bayes classifier to detect and reclassify data taking into account 
+modified Naive Bayes classifier to detect and reclassify data taking into account 
 the optimal modification strategy that an adversary could choose. Lowd and Meek \cite{lowd} 
 provide a framework for reverse engineering a classifier to determine whether 
 an adversary can efficiently learn enough about a classifier to effectively defeat it.
 
-\section{Data set}
+\section{Data Sets}
 
 For this project, we had unlimited access to data from InterPals, a SNS for users who 
 wish to communicate with others from other countries, whether for language practice, cultural 
@@ -612,7 +612,10 @@ Our goal in classification was not only to build an effective classifier for spa
 but also to see how the presence of ``expert features", or features based on account and 
 message metadata, could affect classifier accuracy. To this end, with of each of the classifiers 
 we chose to implement, we evaluated performance on a bag-of-words representation of message data 
-as well as a combination of bag-of-words with expert features.
+as well as a combination of bag-of-words with expert features. Based on our investigation of 
+previous research in this area, we focused our attention on Naive Bayes, linear regression, 
+logistic regression and support vector machines, all of which have been used with varying degrees of 
+success for email, web and social spam classification, as described in our overview of related work.
 
 In order to train our classifiers, we created a feature matrix from the message and account data. 
 We did this using Perl, Spark, and Lucene analyzers. The first step was to generate a dictionary sorted by document 
@@ -640,11 +643,11 @@ Gambia, Ivory Coast and Togo.} spam country, boolean
 \end{itemize}
 
 We initially trained and evaluated three classifiers on a small subset of the data: 
-Na\"ive Bayes, linear regression and SVM.  We chose an 11k spam and 11k ham sample for 
+Naive Bayes, linear regression and SVM.  We chose an 11k spam and 11k ham sample for 
 training, using this particular sample size due to the size of the spam corpus 
 section containing recipient age feature data.  
 
-\subsection{Na\"ive Bayes}
+\subsection{Naive Bayes}
 
 The main idea of the Naive Bayes classification algorithm is that one can calculate the probability 
 of an item belonging to a certain class by applying Bayes' theorem on the assumption that the probability 
@@ -660,15 +663,15 @@ The training procedure sets \(\Pr(c)\) to be the fraction of documents with clas
 \[\Pr(w|c)=\frac{n_{w,c}+\alpha}{\sum_{w'}(n_{w',c}+\alpha)}\ldotp\]
 When testing, our model classifies a document \(d\) as \(\Argmax_c\Pr(c|d)\).
 
-\subsection{Na\"ive Bayes Results}
+\subsection{Naive Bayes Results}
 
-The Na\"ive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
+The Naive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
 to 77\% when expert features were added. The decline in accuracy after adding expert features is most likely 
 explained by the ``naive" assumption in this algorithm that the features are independent. Several of 
 the features that we used, \eg{account lifetime, and whether a user has friends or photos}, are in 
 fact likely to be co-dependent, leading to an overweight of these features during classification. 
 
-One of the advantages of the Na\"ive Bayes classifier was that it took very little time to train the classifier, 
+One of the advantages of the Naive Bayes classifier was that it took very little time to train the classifier, 
 and the steps involved were all trivially parallelizable, which makes it convenient for large data sets. 
 However, in view of the wealth of expert features available to a SNS, many of which are not independent, this was 
 the least compelling classifier choice that we examined.
@@ -1007,7 +1010,7 @@ the ``wild."
 In this paper, we presented a brief overview of the breakdown of spam and scams on the InterPals web site. 
 We then examined a number of statistics on both public and private data that showed that spam users, even when 
 grouped together without regard to their specific angle of attack, share a number of characteristics that differentiate 
-them from legitimate users. We trained and evaluated Na\"ive Bayes, linear regression and SVM classifiers on a subset 
+them from legitimate users. We trained and evaluated Naive Bayes, linear regression and SVM classifiers on a subset 
 of the 4 million messages on which we collected feature statistics. Our evaluation compared the performance of 
 each classifier on bag-of-word representations of message text vis-\`{a}-vis the combination of bag-of-word features 
 with a number of ``expert features." We found that SVMs using an RBF kernel on LIBSVM outperformed the other 
