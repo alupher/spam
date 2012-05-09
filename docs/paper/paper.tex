@@ -154,22 +154,22 @@ A number of researchers have focused on collecting, identifying features
 and classifying various genres of spam on social networks. Zinman and 
 Donath \cite{zinman} extract bundles of profile-based and comment-based 
 features from MySpace profiles, but the relatively poor performance of their classifier highlights 
-the difficulties in manual classification social network spam. Several 
-studies take the approach of baiting spammers with social ``honeypots", profiles 
-created with the sole intent of attracting spam.\cite{stringhini, lee} They 
+the difficulties in manual classification of social network spam. Several 
+studies \cite{stringhini, lee} take the approach of baiting spammers with social ``honeypots", profiles 
+created with the sole intent of attracting spam. They 
 then use the data collected to train classifiers with features including 
 friend request rate and ratios of URLs to text. Webb et al. \cite{webb} use 
 the honeypot approach as well and provide examples of various types of spammers, 
-the typical demographics of their profiles as well as the web pages that they tend to advertise. 
+the typical demographics of their profiles, as well as the web pages that they tend to advertise. 
 
 Gao et al. \cite{gao} look at Facebook wall posts, analyzing temporal properties, 
 URL characteristics, post ratios and other features of malicious accounts. They 
 also pinpoint various spam ``campaigns" based on products advertised in a given 
 time frame. They note that spam on Facebook often exhibits burstiness and is mainly 
 sent from compromised accounts. Benevenuto et al. \cite{benevenuto} identify 
-social attributes of spam and ham on video SNSs (in this case, YouTube), including video 
-view counts, comment counts and user public profile attributes. They then use a 
-support vector machine (SVM) for classification, yielding 96\% accuracy in detecting 
+social attributes of spam and ham on video SNSs (in this case, they scraped data from 
+YouTube), including video view counts, comment counts and user public profile attributes. 
+They then use a support vector machine (SVM) for classification, yielding 96\% accuracy in detecting 
 advertisers (``promoters"), but only accurately identifying 57\% of examples of more general spam.
 
 Not all undesirable content on SNSs is necessarily spam or a scam. SNSs and 
@@ -193,15 +193,15 @@ De Wang et al. \cite{wang} propose a cross-site spam detection framework to shar
 spam data across all social networking sites, building classifiers to identify spam 
 in profiles, messages and web pages. This multi-pronged approach lends itself to 
 associative classification, in which, for example, a message would be classified as 
-spam if it contained a link to a web page that had a high probability of being spam. 
+spam if it contains a link to a web page that has a high probability of being spam. 
 Unfortunately, the differing characteristics of various social networks \eg the length 
 of messages in Facebook vs. Twitter, can reduce the benefits of sharing spam corpora 
 across diverse sites.
 
 Facebook \cite{stein} provides an overview of their ``immune system" defenses 
 against phishing, fraud and spam. The system is composed of classifier services, an 
-ML-derived Feature Extraction Language (FXL), feature loops to aggregate and prepare 
-features for classification and a policy engine to take action on suspected misuse. While 
+ML-derived Feature Extraction Language (FXL), ``feature loops" or services that aggregate 
+and prepare features for classification and a policy engine to take action on suspected misuse. While 
 the discussion remains high-level and includes few implementation particulars, it does 
 include significant detail on the various types and characteristics of undesirable 
 activity on the site, including fake profiles, harassment, compromised accounts, malware 
@@ -231,8 +231,9 @@ Much work has been done on protecting traditional email systems from spam.
 Blanzieri \cite{blanzieri} offers a comprehensive overview of machine learning techniques 
 that can be applied to email filtering. Hao et al. \cite{hao} describe a reputation 
 engine based on lightweight features such as geographic distance between sender and 
-receiver, geolocation anomalies and diurnal patterns. While the target was conventional 
-spam, these and similar features are applicable to spam on SNSs as well.
+receiver and diurnal patterns. While the target was conventional 
+spam, monitoring sender reputation and using similar features (\eg time-of-day when messages 
+were sent), seesm applicable to spam on SNSs as well.
 
 Whittaker et al. \cite{whittaker} describe a scalable phishing machine learning 
 classifier and blacklisting system with high accuracy. Since a considerable 
@@ -242,9 +243,11 @@ system that provides scalable real-time detection of URLs that point to spam web
 determined by URL features, page content and hosting properties of the target domain.
 
 Blog comment spam have also attracted considerable attention from researchers who 
-have applied machine learning \cite{kolari, nag} and NLP \cite{mishne} techniques to the 
-problem. Likewise, Markines et al. \cite{markines} apply similar techniques to spam on 
-social bookmarking sites.
+have applied machine learning \cite{kolari, nag} techniques including SVMs and Bayesian classifiers.
+Mishe et al.\cite{mishne} employ language modeling to find semantic discrepancies between 
+the blogs on which link spam comments are posted and the target sites (which might, for example, 
+contain adult content). Likewise, Markines et al. \cite{markines} apply similar techniques 
+including SVMs and boosting (AdaBoost) to spam on social bookmarking sites.
 
 \subsection{Machine Learning and Data Mining}
 
@@ -254,19 +257,24 @@ independent. However, in the case of spam, fraud and other malicious content,
 users will often modify their behavior to evade detection, leading to degraded 
 classifier performance and the need to re-train classifiers frequently. Several 
 researchers tackle this adversarial problem. Dalvi et al. \cite{dalvi} offer a 
-modified Naive Bayes classifier to detect and reclassify data taking into account 
-the optimal modification strategy that an adversary could choose. Lowd and Meek \cite{lowd} 
-provide a framework for reverse engineering a classifier to determine whether 
-an adversary can efficiently learn enough about a classifier to effectively defeat it.
+modified naive Bayes classifier to detect and reclassify data taking into account 
+the optimal modification strategy that an adversary could choose, given full knowledge of 
+the classifier model and parameters, but without the ability to tamper with the 
+classifier's training data. The authors show that the optimized classifier's counter-strategy 
+is substantially more effective than a standard classifers in the cases examined: 
+adversaries adding words, adding length and substituting words with synonyms. 
+Lowd and Meek \cite{lowd} provide a framework for reverse engineering a 
+classifier to determine whether an adversary can efficiently learn enough 
+about a classifier to effectively defeat it.
 
 \section{Data Sets}
 
-For this project, we had unlimited access to data from InterPals, a SNS for users who 
-wish to communicate with others from other countries, whether for language practice, cultural 
+For this project, we had unlimited access to data from InterPals, a site for users who 
+wish to communicate with people from other countries, whether for language practice, cultural 
 exchange or friendship. Users sign up by completing a registration form with 
 information about themselves, including age, sex and location. After registering, users 
-can expand their profile page to include descriptions, interests, languages they speak, etc. 
-and upload photographs. After clicking on a link sent to their email address, a user can 
+can expand their profile page to include self-descriptions, interests, languages they speak,  
+photographs, etc. After clicking on an activation link sent to their email address, a user can 
 begin to interact with others on the site via private message, public ``wall" posts, comments 
 on photos and on a bulletin board system.
 
@@ -274,21 +282,22 @@ on photos and on a bulletin board system.
 
 Currently, the site combats spam and other Terms of Service violations 
 through volunteer moderators. Users can report content, including private messages, 
-profiles and photographs to moderators, using a form that includes a drop-down menu of 
+profiles and photographs, to moderators by using a form that includes a drop-down menu of 
 pre-selected reasons with the option to add a more detailed message in a text field. 
-Likewise, the message interface allows a user to report a private message spam with a single 
+Likewise, the message interface allows a user to report a private message as spam with a single 
 click. Moderators have access to a queue of these reports. In addition to the material 
 being reported, moderators are able to make decisions based on the data from the reported 
 user's account, including outgoing private messages, IP addresses, as well as a list of 
-other users who have logged in from the same computer (determined via IP address as well 
-as by browser fingerprints). Moderators can then decide to delete the user, send a warning, 
+other users who have logged in from the same computer (determined via IP address, cookies, as well 
+as by rudimentary browser fingerprints). Moderators can then decide to delete the user, send a warning, 
 or clear reports on a user. All moderator actions require them to annotate their decision with a 
 brief log message. When deleting a user, moderators have the option of flagging the 
-reported message (if there is one) as spam, or of flagging all of the user's outgoing private messages 
+reported message (if there is one) as spam or of flagging all of the user's outgoing private messages 
 as spam.
 
 Other anti-spam measures include widespread use of CAPTCHAs across the site and 
-frequency caps. Short-window frequency caps are in place for all users, limiting the 
+frequency caps on activities that involve contact with other users. Short-window 
+frequency caps are in place for all users, limiting the 
 number of messages that can be sent per short time interval (1, 5 and 10 minutes). New users 
 are also subject to a per-day cap on the number of unique users with whom they are able to initiate 
 contact. 
@@ -298,7 +307,7 @@ contact.
 
 \subsection{Spam Data Set}
 
-At the beginning of this research project, slightly two million messages had 
+At the beginning of this research project, slightly over two million messages had 
 been flagged by moderators as spam. We extracted the contents of exactly 2 million 
 spam-labeled messages from accounts deleted by moderators between October 2011 
 and March 2012. As moderators can flag a user's entire list of outgoing messages 
@@ -307,7 +316,7 @@ May 2010.
 
 InterPals stores private messages and user account data in a number of separate MySQL tables. 
 Account information for deleted users is stored for six months, so account details for all spam 
-and ham accounts was available. Extracting the data of interest to this project required 
+and ham accounts were available. Extracting the data of interest to this project required 
 dumping the contents from a query with multiple joins and aggregations across 8 tables with a 
 combined size of 154 GB. To minimize the impact on the load of the site's production database 
 instances, we took an LVM snapshot of slave instance and cloned the database to a spare server. 
@@ -451,8 +460,8 @@ be seen in Figure \ref{fig:cprof}.
 \end{figure}
 
 Users are free to choose any country on their profile. We record each IP address from which a 
-user logs in to the site. By examining the distribution of countries (using the MaxMind GeoIP 
-database) associated with the unique IP addresses (Figure \ref{fig:cip}), we see that the top 
+user logs in to the site. By examining the distribution of countries (using the MaxMind GeoIP
+database\cite{maxmind}) associated with the unique IP addresses (Figure \ref{fig:cip}), we see that the top 
 countries for spammers are significantly different, while the top ham countries are 
 virtually unchanged. Furthermore, only 30\% of the IP addresses of spam users who 
 claimed to be from the United States actually mapped back to a US-based ISP, with a combined 
@@ -1000,7 +1009,7 @@ time zone or keyboard layout.
 It is also anecdotally clear from moderator log messages that spammers re-use their profile photos and 
 these photos are often of celebrities or simply stock photos. Fingerprinting and perceptual hash techniques 
 such as Marr wavelet, discrete cosine transform (DCT), color histograms, etc., which provided by the 
-pHash library, \footnote{http://www.phash.org} seem to promising in detecting image re-use. 
+pHash library\cite{phash}, seem to promising in detecting image re-use. 
 
 Server access logs, search logs and user viewing histories from InterPals, all of which 
 are available to us, offer another avenue for future research. It is conceivable that certain 
