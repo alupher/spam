@@ -624,7 +624,7 @@ for both ham and spam users.
 time constraints. Nevertheless, we observed considerable repetition in the usernames of scammers 
 and we expect that analyzing the substrings in these fields could yield useful features.
 
-\section{Classifiers \& Results}
+\section{Classifiers}
 
 Our goal in classification was not only to build an effective classifier for spam detection, 
 but also to see how the presence of ``expert features", or features based on account and 
@@ -683,19 +683,6 @@ The training procedure sets \(\Pr(c)\) to be the fraction of documents with clas
 \[\Pr(w|c)=\frac{n_{w,c}+\alpha}{\sum_{w'}(n_{w',c}+\alpha)}\ldotp\]
 When testing, our model classifies a document \(d\) as \(\Argmax_c\Pr(c|d)\).
 
-\subsection{Naive Bayes Results}
-
-The Naive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
-to 77\% when expert features were added. The decline in accuracy after adding expert features is most likely 
-explained by the ``naive" assumption in this algorithm that the features are independent. Several of 
-the features that we used, \eg{account lifetime and whether a user has friends or photos}, are in 
-fact likely to be co-dependent, leading to an overweight of these features during classification. 
-
-One of the advantages of the Naive Bayes classifier was that it took very little time to train the classifier 
-and the steps involved were all trivially parallelizable, which makes it convenient for large data sets. 
-However, in view of the wealth of expert features available to a SNS, many of which are not independent, this was 
-the least compelling classifier choice that we examined.
-
 \subsection{Linear Regression}
 
 Linear regression is a method to model the relationship between an output variable, 
@@ -723,6 +710,58 @@ in Compressed Sparse Column format).
 
 Using ridge regression also gave us the opportunity to tune a $\lambda$ parameter in order to 
 regularize the vector components for better performance. 
+
+\subsection{Logistic Regression}
+
+We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, 
+but encountered a bug that prevented the model from being generated correctly. With the expectation 
+that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM 
+instead of pursuing logistic regression. 
+
+\subsection{Support Vector Machines (SVMs)}
+
+SVMs are a classification method that maps class examples (\eg messages) to points 
+in space and aims to maximize the margin around a hyperplane separating the classes.\cite{boser, cortesv95} 
+Because the sets of points may not be linearly separable in the original dimension, a kernel trick can 
+be used to fit the maximum-margin hyperplane in a higher-dimensional feature space (which may appear 
+non-linear in the original input space).
+
+We initially used ScalaNLP's built-in SVM solver, which implements the Pegasos maximization algorithm\cite{pegasos} 
+as extended by Wang, Crammer and Vucetic\cite{wang2}. 
+The optimizer runs stochastic subgradient descent on the primal objective 
+using the batches provided. However, the ScalaNLP SVM interface does not allow users to change kernel 
+functions or parameters, which seems to have led to the classifier's sub-par performance.
+
+We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
+Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
+($\gamma$, $\rho$, $d$), as well as a soft margin parameter ($C$). We used Perl to convert our existing sparse feature 
+matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then ran one of the package's 
+tools to perform simple scaling on the data. 
+
+Given the complexity and time-intensive nature of choosing and testing parameters, the 
+package includes a Python script that performs cross-validation to suggest appropriate 
+$\gamma$ and $C$ values for the recommended Gaussian radial basis function (RBF) kernel. The RBF kernel is 
+a real-valued function such that: 
+$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
+We ran this script with 10-fold cross-validation on a subset of 5000 messages with 
+expert features to obtain $C = 8$ and $\gamma = 0.0078125$, which we used to tune 
+the SVM we used to classify both the bag-of-words and expert feature models.
+
+\section{Performance \& Results}
+
+\subsection{Naive Bayes Results}
+
+The Naive Bayes classifier had an accuracy of 82\% when trained on the bag-of-words. Its accuracy dropped 
+to 77\% when expert features were added. The decline in accuracy after adding expert features is most likely 
+explained by the ``naive" assumption in this algorithm that the features are independent. Several of 
+the features that we used, \eg{account lifetime and whether a user has friends or photos}, are in 
+fact likely to be co-dependent, leading to an overweight of these features during classification. 
+
+One of the advantages of the Naive Bayes classifier was that it took very little time to train the classifier 
+and the steps involved were all trivially parallelizable, which makes it convenient for large data sets. 
+However, in view of the wealth of expert features available to a SNS, many of which are not independent, this was 
+the least compelling classifier choice that we examined.
+
 
 \subsection{Linear Regression Results}
 
@@ -824,46 +863,8 @@ are denoted by an `F-' prefix)}
 \label{tab:lrfeatse}
 \end{table}
 
-\subsection{Logistic Regression}
-
-We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, 
-but encountered a bug that prevented the model from being generated correctly. With the expectation 
-that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM 
-instead of pursuing logistic regression. 
-
-\subsection{Support Vector Machines (SVMs)}
-
-%intro to svms
-
-SVMs are a classification method that maps class examples (\eg messages) to points 
-in space and aims to maximize the margin around a hyperplane separating the classes.\cite{boser, cortesv95} 
-Because the sets of points may not be linearly separable in the original dimension, a kernel trick can 
-be used to fit the maximum-margin hyperplane in a higher-dimensional feature space (which may appear 
-non-linear in the original input space).
-
-We initially used ScalaNLP's built-in SVM solver, which implements the Pegasos maximization algorithm\cite{pegasos} 
-as extended by Wang, Crammer and Vucetic\cite{wang2}. 
-The optimizer runs stochastic subgradient descent on the primal objective 
-using the batches provided. However, the ScalaNLP SVM interface does not allow users to change kernel 
-functions or parameters, which seems to have led to the classifier's sub-par performance.
-
-We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
-Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
-($\gamma$, $\rho$, $d$), as well as a soft margin parameter ($C$). We used Perl to convert our existing sparse feature 
-matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then ran one of the package's 
-tools to perform simple scaling on the data. 
-
-Given the complexity and time-intensive nature of choosing and testing parameters, the 
-package includes a Python script that performs cross-validation to suggest appropriate 
-$\gamma$ and $C$ values for the recommended Gaussian radial basis function (RBF) kernel. The RBF kernel is 
-a real-valued function such that: 
-$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\intercal\mathbf{x}_j+r)^d, \gamma>0$$
-We ran this script with 10-fold cross-validation on a subset of 5000 messages with 
-expert features to obtain $C = 8$ and $\gamma = 0.0078125$, which we used to tune 
-the SVM we used to classify both the bag-of-words and expert feature models.
 
 \subsection{SVM Results}
-
 Our initial results using the Pegasos SVM solver included in ScalaNLP were lower than expected. The 
 classifier trained on the bag-of-words feature set (22k messages) yielded a 77\% mean accuracy 
 over 10-fold cross-validation. The addition of expert features actually decreased this accuracy to 
