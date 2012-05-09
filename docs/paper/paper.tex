@@ -137,7 +137,7 @@ Many of these studies employ techniques previously used to combat conventional
 email and web spam. SNSs also provide opportunities to take advantage of user 
 reputation and other social graph-dependent features to improve classification. 
 Nevertheless, most research has been carried out on publicly-available data 
-from SNSs, making it difficult up until now to measure the effect of private user 
+from SNSs, making it unfeasible up until now to measure the effect of private user 
 data on algorithms for detecting site misuse.
 
 \subsection{Social Spam Features}
@@ -167,7 +167,10 @@ URL characteristics, post ratios and other features of malicious accounts. They
 also pinpoint various spam ``campaigns" based on products advertised in a given 
 time frame. They note that spam on Facebook often exhibits burstiness and is mainly 
 sent from compromised accounts. Benevenuto et al. \cite{benevenuto} identify 
-attributes of spam on video SNSs and use a Support Vector Machine (SVM) for classification.
+social attributes of spam and ham on video SNSs (in this case, YouTube), including video 
+view counts, comment counts and user public profile attributes. They then use a 
+support vector machine (SVM) for classification, yielding 96\% accuracy in detecting 
+advertisers (``promoters"), but only accurately identifying 57\% of examples of more general spam.
 
 Not all undesirable content on SNSs is necessarily spam or a scam. SNSs and 
 online communities witness inappropriate user behavior, where users post offensive 
