@@ -258,7 +258,15 @@ InterPals stores private messages and user account data in a number of separate 
 
 \subsection{Ham Set}
 
-Unlike spam messages, we did not have access to a comparable corpus of human-labeled ham messages. To simplify the labeling of ham messages, we made the assumption that messages remaining in the inboxes of active users after a period of several months would most likely not be spam. Consequently, we extracted a working set of 2 million ham messages that were sent in the beginning of January, 2012 and still existed in the recipient's inbox. To reduce the possibility of collecting messages sent by uncaught spammers to inactive or dormant users, we selected messages only from users and to recipients who had logged in within the last two weeks. As in the case of spam, we collected two million messages with associated account data and merged them into text files for feature extraction.
+Unlike spam messages, we did not have access to a comparable corpus of human-labeled ham 
+messages. To simplify the labeling of ham messages, we made the assumption that messages remaining in 
+the inboxes of active users after a period of several months would most likely not be spam. 
+Consequently, we extracted a working set of 2 million ham messages that were sent in late December 2011 and early 
+January 2012 and still existed in the recipient's inbox in March 2012. To reduce the 
+possibility of collecting messages sent by uncaught spammers to inactive or dormant users, 
+we selected messages only from users and to recipients who had logged in within the last two 
+weeks. As in the case of spam, we collected two million messages with associated account 
+data and merged them into text files for feature extraction.
 
 \subsection{Categories of Spam}
 
@@ -416,9 +424,6 @@ they were in the United States (Figure \ref{fig:usaham}).
     \caption{Sender account lifetime at the time that the message was sent.}
     \label{fig:lifetime}
 \end{figure}
-
-
-
 
 \textbf{Sender Email:} Users must provide email addresses upon signup. The site does not allow users to contact other 
 members before verifying that the email address provided is valid, via an account activation link sent to the signup 
@@ -636,8 +641,10 @@ representations created above,
 
 \subsection{Logistic Regression}
 
-We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, but encountered a bug that prevented the model from being generated correctly. With the expectation that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM instead of pursuing logistic regression. 
-
+We attempted to train the multiple logistic regression classifier implemented by the ScalaNLP package, 
+but encountered a bug that prevented the model from being generated correctly. With the expectation 
+that SVMs would outperform logistic regression, we decided to focus our efforts on tuning the SVM 
+instead of pursuing logistic regression. 
 
 \subsection{Support Vector Machines (SVMs)}
 
@@ -653,8 +660,8 @@ which seems to have led to the classifier's sub-par performance.
 We then turned to LIBSVM, a library for SVM training and classification in C++ and Java, with wrappers for 
 Python and other languages. The package allows one to specify the type of kernel to use, kernel parameters 
 ($\gamma$, $\rho$, $d$), as well as a penalty parameter ($C$). We used Perl to convert the sparse feature 
-matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package'
-s tools to perform simple scaling on the data. 
+matrices generated for use with ScalaNLP to a format recognized by LIBSVM. We then used one of the package's 
+tools to perform simple scaling on the data. 
 
 Given the complexity and time-intensive nature of choosing and testing parameters, the 
 package includes a Python script that performs cross-validation to suggest appropriate 
@@ -764,6 +771,14 @@ are denoted by the 'F-' prefix.}
 
 \subsection{SVMs}
 
+Our initial results using the Pegasos SVM solver included in ScalaNLP were disappointing. The 
+classifier trained on the bag-of-words feature set (from 22k messages) yielded a 77\% mean accuracy 
+over 10-fold cross-validation. The addition of expert features actually decreased this accuracy to 
+51\%. Table \{tab:svmfeats} provides a list of top features for the bag-of-words and expert 
+feature models. We see that for the bag-of-words classifier, the words "year," "new," "happy,"  
+"2012," "wish," and "you" all have high weights, which makes sense given that the ham data was 
+collected around the beginning of January. 
+
 \begin{table}
 \begin{tabular}{l|l||l|l}
 \multicolumn{2}{c}{\textbf{Bag-of-Words}} & 
@@ -812,6 +827,18 @@ From a site's perspective, ...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
+
+\subsection{Data Collection}
+
+The ham message collection methodology used in this project may have been flawed, leading questionable 
+performance for several classifiers. The 2 million ham messages were sent over a span of 10 days, from 
+December 23, 2011 to January 1, 2012. While we chose the corpus' start date as exactly four months before 
+extracting the data, the coincidental timing with a global holiday seems to have introduced unusual 
+skew in the bag-of-words features. In contrast, the majority of messages in the spam corpus span a period of 
+7 months, with only a slight linear increase in volume over the interval.  Consequently, as seen in 
+the Linear Regression and SVM feature weight tables, words typically associated with the New Year gained 
+undue wieght during classification.  We plan to address this issue by creating a new ham message corpus 
+through sampling that matches the temporal distribution of spam messages more closely.
 
 \subsection{Spam Grouping}
 
