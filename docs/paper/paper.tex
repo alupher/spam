@@ -60,24 +60,31 @@ and use them to train and evaluate classifiers.
 % Modified from project proposal
 
 Social networks of any significant size witness a constant flow of spam, scams and phishing attacks. 
-The nature of this unwanted activity can be quite diverse, specific to a site's target audience and 
-often not trivial to detect. Marketers can spam members with unwanted advertisements, fraudsters 
-lure users with advance fee frauds and other confidence tricks, while others may attempt to steal user
-information by directing users to external phishing pages. In contrast to email spam, social spam 
-has a more personal component, since both spammers and legitimate users (``ham" users) have accompanying 
-profiles with descriptive information. 
+The nature of this unwanted activity, which we henceforth refer to collectively as ``spam" can be 
+quite diverse, specific to a site's target audience and often not trivial to detect. Marketers 
+spam members with unwanted advertisements, fraudsters lure users with advance fee frauds and 
+other confidence tricks, while others may attempt to steal user information by directing users 
+to external phishing pages. 
 
 Sites with global reach see communication among its members in a number foreign languages with 
-varying levels of ability. This means that much benign content shares characteristics like misspellings, 
-awkward phrases, etc. that might have made certain types of common frauds and spam more easy to 
-distinguish on US-based (or English-language) sites.
+varying levels of ability. This means that much benign content shares characteristics including 
+misspellings, awkward phrases, etc. that might have made certain types of common frauds and spam 
+more easy to distinguish on US-based (or English-language) sites. Likewise, simple regional IP-based 
+filtering to target high-spam countries like Nigeria and Ghana would prevent legitimate users 
+located on these networks from accessing the site.
 
-Recent research has begun to evaluate Email spam and techniques with which to combat it has been studied 
-extensively. Like
+In contrast to email spam, social spam has a more personal component, since both spammers 
+and legitimate users (``ham" users) have accompanying profiles with descriptive information. This can 
+lead to more drawn-out, conversational attempts by spammers to approach users, since communication 
+is more immediate (in the sense that users may see that they are online at the same time, may 
+visit each others' profiles, etc.). However, the additional user data inherent in SNSs also 
+offers a bountiful supply of data that site operators can mine to detect spam more effectively.
 
-
-
-% focus on extra impact of non-public features vs. public (bag-of-words)
+Most research on social networking spam has been done at a distance, using data collected 
+either through scraping or artificially attracting spammers through ``honeypot" accounts. This 
+paper leverages access to private messages, metadata and account details from a popular SNS 
+to study the characteristics of social spam as well as the features and classifiers that 
+sites can use to detect it.
 
 \subsection{Approach}
 
