@@ -319,9 +319,10 @@ Account information for deleted users is stored for six months, so account detai
 and ham accounts were available. Extracting the data of interest to this project required 
 dumping the contents from a query with multiple joins and aggregations across 8 tables with a 
 combined size of 154 GB. To minimize the impact on the load of the site's production database 
-instances, we took an LVM snapshot of slave instance and cloned the database to a spare server. 
+instances, we took an LVM snapshot of a replication instance (the production database has one master and one 
+slave) and cloned the database to a spare server. 
 In addition to using SQL to extract the data, we wrote Perl scripts to clean the data, tokenize 
-messages and prepare data for further processing. The methodology section (X) offers more details 
+messages and prepare data for further processing. The methodology section offers more details 
 on precisely which items of data were collected and why.
 
 \subsection{Ham Data Set}
@@ -330,34 +331,34 @@ Unlike spam messages, we did not have access to a comparable corpus of human-lab
 messages. To simplify the labeling of ham messages, we made the assumption that messages remaining in 
 the inboxes of active users after a period of several months would most likely not be spam. 
 Consequently, we extracted a working set of 2 million ham messages that were sent in late December 2011 and early 
-January 2012 and still existed in the recipient's inbox in March 2012. To reduce the 
+January 2012 and still existed in the recipient's inbox as of March 2012. To reduce the 
 possibility of collecting messages sent by uncaught spammers to inactive or dormant users, 
-we selected messages only from users and to recipients who had logged in within the last two 
-weeks. As in the case of spam, we collected two million messages with associated account 
+we selected messages only from senders and to recipients who had logged in within the last two 
+weeks. As in the case of the spam data set, we collected two million messages with associated account 
 data and merged them into text files for feature extraction.
 
 \subsection{Categories of Spam}
 
-In the course of collecting the data, we observed a number of different types of 
+In the course of collecting the data, we observed a number of distinct classes of 
 undesirable messages. Our ongoing observation of spam on the InterPals website provided 
 direct intuition into the major classes of unwanted behavior that we classified as spam for 
 this project. We noted the following broad categories:
 
 \begin{itemize}
-\item \textbf{Advance Fee Fraud} 
-\item \textbf{Romance Scams} 
-\item \textbf{Sexual Solicitation}
-\item \textbf{Porn Ads}
-\item \textbf{Advertising External Sites}
-\item \textbf{Webcam Ads}
-\item \textbf{Money Muling}
-\item \textbf{Begging \& Gift Requests}
-\item \textbf{Business Proposals}
+\item \textbf{Advance fee fraud}, including inheritance, lotter, visa and customs-clearance scams
+\item \textbf{Romance scams}, including ``mail-order bride" and military scams
+\item \textbf{Sexual solicitation}
+\item \textbf{Ads for porn sites}, primarily adult webcam and live chat sites.
+\item \textbf{Ads for miscellaneous external sites}, often other SNSs
+\item \textbf{Money muling}, often in the guise of high-paying ``stay-at-home" jobs or ``mystery" shopping
+\item \textbf{Begging \& gift requests}
+\item \textbf{Business proposals}
 \end{itemize}
 
 These categorizations are based only on cursory manual observation of a sample of several tens of thousands 
 spam-labeled messages. We plan to quantify the volume of messages in each of these categories and 
-attempt to provide a finer granularity of categorization in future research. 
+attempt to provide a finer granularity of categorization (and more detailed level of description) in 
+future research. 
 
 %Analyzing the relevant terms in log comments entered by moderators when 
 %deleting spammer accounts provides the following breakdown:
@@ -365,8 +366,8 @@ attempt to provide a finer granularity of categorization in future research.
 \section{Methodology}
 
 We chose to focus on spam in private messages for this paper, given that messages account for 
-a majority of user spam reports. In addition to using the bag-of-words representation of 
-the message content, we aimed to identify a subset of additional, relevant ``expert" features 
+a majority of user spam reports on the site. In addition to using the bag-of-words representation of 
+the message content, we aimed to identify a subset of relevant ``expert" features 
 based on public and non-public message and account information that would augment the classifier's 
 accuracy. We first extracted a number of fields that we expected might improve classification. 
 
