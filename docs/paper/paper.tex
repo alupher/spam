@@ -5,12 +5,16 @@
 \usepackage{xspace}
 \usepackage{multirow}
 \usepackage{amsmath}
+\usepackage[hang,small,bf]{caption}
+\DeclareCaptionType{copyrightbox}
 
 \DeclareMathOperator{\Argmax}{argmax}
 \newcommand{\PosC}{\mathrm{Spam}}
 \newcommand{\NegC}{\mathrm{Ham}}
 \newcommand{\ie}{{\em i.e.,}~}
 \newcommand{\eg}{{\em e.g.,}~}
+
+\renewcommand{\normalsize}{\fontsize{10.5pt}{12.5pt}\selectfont}
 
 \setcounter{page}{1}
 \pagenumbering{arabic}
@@ -70,7 +74,7 @@ more easy to distinguish on US-based (or English-language) sites. Likewise, simp
 filtering to target high-spam countries like Nigeria and Ghana would prevent legitimate users 
 located on blocked networks from accessing the site.
 
-In contrast to email spam, social spam has a more personal component, since both spammers 
+In contrast to email spam, social spam often has a more personal component, since both spammers 
 and legitimate users (``ham" users) have accompanying profiles with descriptive information. This can 
 lead to more drawn-out, conversational attempts by spammers to approach users, since communication 
 is more immediate (in the sense that users may see that they are online at the same time, may 
@@ -385,6 +389,7 @@ we had for each them, while making sure to include the most vital account inform
 Table \ref{tab:feats} offers statistics on a number of the account features that we examined. 
 
 \begin{table}
+\small
 \begin{tabular}{|l|l|r|r|r|}
     \hline
     \textbf{Feature} & \textbf{Label} & \textbf{Mean} & \textbf{Median} & \textbf{Std. Dev.}\\
@@ -737,6 +742,7 @@ of ham.
 
 % LR B-O-W
 \begin{table}
+\small
 \begin{tabular}{l|l||l|l}
 \multicolumn{2}{c}{\textbf{Ham}} & 
 \multicolumn{2}{c}{\textbf{Spam}} \\
@@ -770,6 +776,7 @@ bonne & -0.1014 & sabina & 0.105\\
 
 % LR + expert
 \begin{table}
+\small
 \begin{tabular}{l|r||l|r}
 \multicolumn{2}{c}{\textbf{Ham}} & 
 \multicolumn{2}{c}{\textbf{Spam}} \\
@@ -859,6 +866,7 @@ skewed weights (and the inability to tune the SVM solver via ScalaNLP) prompted 
 on the same data.
 
 \begin{table}
+\small
 \begin{tabular}{l|r||l|r}
 \multicolumn{2}{c}{\textbf{Bag-of-Words}} & 
 \multicolumn{2}{c}{\textbf{Expert Features}} \\
@@ -903,6 +911,7 @@ from the addition of expert features. As expected, however, both the ScalaNLP an
 took substantially longer to train than NB and LR.
 
 \begin{table}
+\small
 \begin{tabular}{r|r|r}
 \hline
 \textbf{Dataset Size} & \textbf{Bag-of-Words} & \textbf{Expert Features} \\
